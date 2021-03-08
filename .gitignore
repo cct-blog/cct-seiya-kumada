@@ -1,3 +1,9 @@
 rust/example/Cargo.lock
 rust/example/Cargo.toml
 rust/example/target/
+cvae_by_pixyz/.DS_Store
+cvae_by_pixyz/.python-version
+cvae_by_pixyz/__pycache__/
+cvae_by_pixyz/data/
+cvae_by_pixyz/runs/
+cvae_by_pixyz/results/
