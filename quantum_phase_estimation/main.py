@@ -47,7 +47,5 @@ if __name__ == "__main__":
     print('Diff: {:.4f}'.format(np.abs(true_phase - phase_estimated)))
 
     # ヒストグラムを描画して保存する。
-    plt.tick_params(labelsize=1)
-    plt.xlabel("state", fontsize=2)
     plot_histogram(answer, figsize=(20, 7))
     plt.savefig("./histogram.jpg")
