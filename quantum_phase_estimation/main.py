@@ -14,7 +14,7 @@ if __name__ == "__main__":
     # 回路を作る。
     qc, theta = QPE.make_circuit(N_ENCODE)
 
-    # 2*pi*φを与える（正解値）
+    # θ=2*pi*φを与える（正解値）
     phase = np.random.rand()
 
     # 回路にパラメータを設定する。
@@ -37,6 +37,7 @@ if __name__ == "__main__":
     keys = list(results.get_counts().keys())
     idx = np.argmax(list(results.get_counts().values()))
     ans = int(keys[idx], 2)
+    print('Estimated state: {}'.format(ans))
     phase_estimated = ans / (2 ** N_ENCODE)
 
     # 正しい位相の値
