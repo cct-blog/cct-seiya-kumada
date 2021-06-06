@@ -7,3 +7,7 @@ cvae_by_pixyz/__pycache__/
 cvae_by_pixyz/data/
 cvae_by_pixyz/runs/
 cvae_by_pixyz/results/
+quantum_phase_estimation/.ipynb_checkpoints/
+quantum_phase_estimation/.python-version
+quantum_phase_estimation/__pycache__/
+quantum_phase_estimation/*.jpg
