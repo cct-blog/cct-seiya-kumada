@@ -11,3 +11,13 @@ quantum_phase_estimation/.ipynb_checkpoints/
 quantum_phase_estimation/.python-version
 quantum_phase_estimation/__pycache__/
 quantum_phase_estimation/*.jpg
+monty_hall_problem/mypyreport/index.html
+monty_hall_problem/mypyreport/mypy-html.css
+monty_hall_problem/mypyreport/html/src/answerer.py.html
+monty_hall_problem/mypyreport/html/src/chairperson.py.html
+monty_hall_problem/mypyreport/html/src/main.py.html
+monty_hall_problem/mypyreport/html/src/problem.py.html
+monty_hall_problem/src/__pycache__/answerer.cpython-38.pyc
+monty_hall_problem/src/__pycache__/chairperson.cpython-38.pyc
+monty_hall_problem/src/__pycache__/main.cpython-38.pyc
+monty_hall_problem/src/__pycache__/problem.cpython-38.pyc
