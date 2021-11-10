@@ -1,2 +1,0 @@
-Generated HTML report (via XSLT): C:\projects\cct-seiya-kumada\monty_hall_problem\mypyreport\index.html
-Success: no issues found in 4 source files
