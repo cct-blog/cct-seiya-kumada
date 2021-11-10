@@ -1,16 +1,13 @@
+import matplotlib.pyplot as plt
+
 import src.answerer as an
 import src.chairperson as cp
 import src.problem as pr
 
-ITER = 10000
-N = 3
-if __name__ == "__main__":
-    chairperson = cp.Chairperson()
-    answerer = an.Answerer(changes=False)
-    problem = pr.Problem(N)
 
+def run(chairperson: cp.Chairperson, answerer: an.Answerer, problem: pr.Problem, iter: int) -> float:
     c = 0
-    for i in range(ITER):
+    for i in range(iter):
         # 問題を作る。
         p = problem.create()
 
@@ -38,4 +35,26 @@ if __name__ == "__main__":
             c += 1
 
     # 正答率
-    print(c / ITER)
+    return c / iter
+
+
+if __name__ == "__main__":
+    chairperson = cp.Chairperson()
+    answerer = an.Answerer(changes=True)
+    size = 3
+    problem = pr.Problem(size)
+
+    start = 100
+    end = 20000
+    step = 100
+    rates = []
+    for iter in range(start, end, step):
+        rate = run(chairperson, answerer, problem, iter)
+        rates.append(rate)
+
+    xs = list(range(start, end, step))
+    plt.plot(xs, rates)
+    plt.xlabel("iteration")
+    plt.ylabel("probability(change)")
+    plt.hlines([2 / 3], xmin=0, xmax=end)
+    plt.savefig("./change.jpg")
