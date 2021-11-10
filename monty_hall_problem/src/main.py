@@ -14,7 +14,7 @@ def run(chairperson: cp.Chairperson, answerer: an.Answerer, problem: pr.Problem,
         # 司会者が答えを知る。
         chairperson.set(p)
 
-        # 解答者が問題（の数）を知る。
+        # 解答者がドアの数（=3）を知る。
         answerer.set(len(p))
 
         # 解答者が選択する。
@@ -40,21 +40,29 @@ def run(chairperson: cp.Chairperson, answerer: an.Answerer, problem: pr.Problem,
 
 if __name__ == "__main__":
     chairperson = cp.Chairperson()
-    answerer = an.Answerer(changes=True)
-    size = 3
+    size = 4
     problem = pr.Problem(size)
 
-    start = 100
-    end = 20000
-    step = 100
-    rates = []
-    for iter in range(start, end, step):
-        rate = run(chairperson, answerer, problem, iter)
-        rates.append(rate)
+    N = 100
+    ITER = 10000
 
-    xs = list(range(start, end, step))
-    plt.plot(xs, rates)
+    answerer = an.Answerer(changes=True)
+    change_rates = []
+    for iter in range(N):
+        rate = run(chairperson, answerer, problem, ITER)
+        change_rates.append(rate)
+
+    answerer = an.Answerer(changes=False)
+    no_change_rates = []
+    for iter in range(N):
+        rate = run(chairperson, answerer, problem, ITER)
+        no_change_rates.append(rate)
+
+    xs = list(range(N))
+    plt.scatter(xs, change_rates, label="change", s=1)
+    plt.scatter(xs, no_change_rates, label="no change", s=1)
     plt.xlabel("iteration")
-    plt.ylabel("probability(change)")
-    plt.hlines([2 / 3], xmin=0, xmax=end)
-    plt.savefig("./change.jpg")
+    plt.ylabel("probability")
+    plt.hlines([1 / size, (size - 1) / size / (size - 2)], xmin=0, xmax=N)
+    plt.legend(loc="best")
+    plt.savefig("./probability_{}.jpg".format(size))
