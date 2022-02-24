@@ -119,6 +119,22 @@ void check_histogram(const cv::Mat& image, const std::map<cv::Vec3b, int>& histo
     std::cout << w * h << std::endl;
 
 }
+
+void make_input(const std::map<cv::Vec3b, int>& histo, const float& total_pixels)
+{
+    auto b = std::begin(histo);
+    auto e = std::end(histo);
+    std::vector<feature_t> features{};
+    std::vector<float> weights{};
+    while (b != e)
+    {
+        const auto& rgb = b->first;
+        features.emplace_back(feature_t{ static_cast<float>(rgb[0]), static_cast<float>(rgb[1]), static_cast<float>(rgb[2]) });
+        weights.emplace_back(b->second / total_pixels);
+        ++b;
+    }
+
+}
 void sample_3()
 {
     auto path_0 = fs::path("C:\\projects\\cct-seiya-kumada\\earth_movers_distance\\images\\sea_1.png");
@@ -130,6 +146,7 @@ void sample_3()
     std::map<cv::Vec3b, int> histo{};
     make_histogram(image_0, histo);
     check_histogram(image_0, histo);
-
+    float total_pixels = w * h;
+    make_input(histo, total_pixels);
     
 }
