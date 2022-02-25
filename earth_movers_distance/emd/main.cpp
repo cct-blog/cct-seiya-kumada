@@ -17,51 +17,51 @@ float dist(feature_t* F1, feature_t* F2)
 	return sqrt(dX * dX + dY * dY + dZ * dZ);
 }
 
-void sample_1();
-void sample_2();
-void sample_3();
+//void sample_1();
+//void sample_2();
+void sample();
 
 int main(int argc, char* args[])
 {
-    sample_3();
+    sample();
 	return 0;
 }
 
-void sample_1()
-{
-    /* 分布Pの特徴ベクトル */
-    feature_t f1[4] = { {100,40,22}, {211,20,2}, {32,190,150}, {2,100,100} };
-    /* 分布Qの特徴ベクトル */
-    feature_t f2[3] = { {0,0,0}, {50,100,80}, {255,255,255} };
-    /* 分布Pの重み */
-    float w1[4] = { 0.4, 0.3, 0.2, 0.1  };
-    /* 分布Qの重み */
-    float w2[3] = { 0.5, 0.3, 0.2 };
-    /* 分布Pのシグネチャ */
-    signature_t s1 = { 4, f1, w1 };
-    /* 分布Qのシグネチャ */
-    signature_t s2 = { 3, f2, w2 };
-
-    /* EMDを計算 */
-    float e;
-    e = emd(&s1, &s2, dist, 0, 0);
-    printf("emd = %f\n", e);
-}
-void sample_2()
-{
-    std::vector<feature_t> f1 = { {100, 40, 22}, {211, 20, 2}, {32, 190, 150}, {2, 100, 100}, };
-    std::vector<feature_t> f2 = { {0, 0, 0}, {50, 100, 80}, {255, 255, 255} };
-    std::vector<float> w1 = { 0.4, 0.3, 0.2, 0.1 };
-    std::vector<float> w2 = { 0.5, 0.3, 0.2 };
-    signature_t s1 = { f1.size(), f1.data(), w1.data() };
-    signature_t s2 = { f2.size(), f2.data(), w2.data() };
-
-    float e;
-    e = emd(&s1, &s2, dist, 0, 0);
-    printf("HOGE emd = %f\n", e);
-
-}
-
+//void sample_1()
+//{
+//    /* 分布Pの特徴ベクトル */
+//    feature_t f1[4] = { {100,40,22}, {211,20,2}, {32,190,150}, {2,100,100} };
+//    /* 分布Qの特徴ベクトル */
+//    feature_t f2[3] = { {0,0,0}, {50,100,80}, {255,255,255} };
+//    /* 分布Pの重み */
+//    float w1[4] = { 0.4, 0.3, 0.2, 0.1  };
+//    /* 分布Qの重み */
+//    float w2[3] = { 0.5, 0.3, 0.2 };
+//    /* 分布Pのシグネチャ */
+//    signature_t s1 = { 4, f1, w1 };
+//    /* 分布Qのシグネチャ */
+//    signature_t s2 = { 3, f2, w2 };
+//
+//    /* EMDを計算 */
+//    float e;
+//    e = emd(&s1, &s2, dist, 0, 0);
+//    printf("emd = %f\n", e);
+//}
+//void sample_2()
+//{
+//    std::vector<feature_t> f1 = { {100, 40, 22}, {211, 20, 2}, {32, 190, 150}, {2, 100, 100}, };
+//    std::vector<feature_t> f2 = { {0, 0, 0}, {50, 100, 80}, {255, 255, 255} };
+//    std::vector<float> w1 = { 0.4, 0.3, 0.2, 0.1 };
+//    std::vector<float> w2 = { 0.5, 0.3, 0.2 };
+//    signature_t s1 = { f1.size(), f1.data(), w1.data() };
+//    signature_t s2 = { f2.size(), f2.data(), w2.data() };
+//
+//    float e;
+//    e = emd(&s1, &s2, dist, 0, 0);
+//    printf("HOGE emd = %f\n", e);
+//
+//}
+//
 namespace std
 {
     inline bool operator<(const cv::Vec3b& lhs, const cv::Vec3b& rhs)
@@ -151,7 +151,7 @@ void make_inputs_for_emd(const std::string& path, std::vector<feature_t>& featur
     std::cout << " * features.size(): " << features.size() << std::endl;
 }
 
-void sample_3()
+void sample()
 {
     std::string path_1 = "C:\\projects\\cct-seiya-kumada\\earth_movers_distance\\images\\sea_1.png";
     std::vector<feature_t> features_1{};
@@ -163,10 +163,16 @@ void sample_3()
     std::vector<float> weights_2{};
     make_inputs_for_emd(path_2, features_2, weights_2);
 
-    std::string path_3 = "C:\\projects\\cct-seiya-kumada\\earth_movers_distance\\images\\mountain.png";
+    std::string path_3 = "C:\\projects\\cct-seiya-kumada\\earth_movers_distance\\images\\mountain_1.png";
     std::vector<feature_t> features_3{};
     std::vector<float> weights_3{};
     make_inputs_for_emd(path_3, features_3, weights_3);
+
+    std::string path_4 = "C:\\projects\\cct-seiya-kumada\\earth_movers_distance\\images\\mountain_2.png";
+    std::vector<feature_t> features_4{};
+    std::vector<float> weights_4{};
+    make_inputs_for_emd(path_4, features_4, weights_4);
+
 
     signature_t s1 = { features_1.size(), features_1.data(), weights_1.data() };
     signature_t s2 = { features_2.size(), features_2.data(), weights_2.data() };
@@ -179,4 +185,8 @@ void sample_3()
 
     auto e23 = emd(&s2, &s3, dist, 0, 0);
     std::cout << " * emd 2-3: " << e23 << std::endl;
+
+    signature_t s4 = { features_4.size(), features_4.data(), weights_4.data() };
+    auto e34 = emd(&s3, &s4, dist, 0, 0);
+    std::cout << " * emd 3-4: " << e34 << std::endl;
 }
