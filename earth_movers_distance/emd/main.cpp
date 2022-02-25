@@ -120,12 +120,10 @@ void check_histogram(const cv::Mat& image, const std::map<cv::Vec3b, int>& histo
 
 }
 
-void make_input(const std::map<cv::Vec3b, int>& histo, const float& total_pixels)
+void make_inputs(const std::map<cv::Vec3b, int>& histo, const float& total_pixels, std::vector<feature_t>& features, std::vector<float>& weights)
 {
     auto b = std::begin(histo);
     auto e = std::end(histo);
-    std::vector<feature_t> features{};
-    std::vector<float> weights{};
     while (b != e)
     {
         const auto& rgb = b->first;
@@ -133,20 +131,52 @@ void make_input(const std::map<cv::Vec3b, int>& histo, const float& total_pixels
         weights.emplace_back(b->second / total_pixels);
         ++b;
     }
-
 }
-void sample_3()
+
+void make_inputs_for_emd(const std::string& path, std::vector<feature_t>& features, std::vector<float>& weights)
 {
-    auto path_0 = fs::path("C:\\projects\\cct-seiya-kumada\\earth_movers_distance\\images\\sea_1.png");
-    auto image_0 = cv::imread(path_0.string());
-    auto size = image_0.size();
+    auto image = cv::imread(path);
+    auto size = image.size();
     auto h = size.height;
     auto w = size.width;
 
     std::map<cv::Vec3b, int> histo{};
-    make_histogram(image_0, histo);
-    check_histogram(image_0, histo);
+    make_histogram(image, histo);
+    //check_histogram(image_0, histo_0);
     float total_pixels = w * h;
-    make_input(histo, total_pixels);
-    
+    make_inputs(histo, total_pixels, features, weights);
+    auto p = fs::path(path);
+    std::cout << "> " << fs::basename(p) << std::endl;
+    std::cout << " * total_pixels: " << total_pixels << std::endl;
+    std::cout << " * features.size(): " << features.size() << std::endl;
+}
+
+void sample_3()
+{
+    std::string path_1 = "C:\\projects\\cct-seiya-kumada\\earth_movers_distance\\images\\sea_1.png";
+    std::vector<feature_t> features_1{};
+    std::vector<float> weights_1{};
+    make_inputs_for_emd(path_1, features_1, weights_1);
+ 
+    std::string path_2 = "C:\\projects\\cct-seiya-kumada\\earth_movers_distance\\images\\sea_2.png";
+    std::vector<feature_t> features_2{};
+    std::vector<float> weights_2{};
+    make_inputs_for_emd(path_2, features_2, weights_2);
+
+    std::string path_3 = "C:\\projects\\cct-seiya-kumada\\earth_movers_distance\\images\\mountain.png";
+    std::vector<feature_t> features_3{};
+    std::vector<float> weights_3{};
+    make_inputs_for_emd(path_3, features_3, weights_3);
+
+    signature_t s1 = { features_1.size(), features_1.data(), weights_1.data() };
+    signature_t s2 = { features_2.size(), features_2.data(), weights_2.data() };
+    auto e12 = emd(&s1, &s2, dist, 0, 0);
+    std::cout << " * emd 1-2: " << e12 << std::endl;
+   
+    signature_t s3 = { features_3.size(), features_3.data(), weights_3.data() };
+    auto e13 = emd(&s1, &s3, dist, 0, 0);
+    std::cout << " * emd 1-3: " << e13 << std::endl;
+
+    auto e23 = emd(&s2, &s3, dist, 0, 0);
+    std::cout << " * emd 2-3: " << e23 << std::endl;
 }
