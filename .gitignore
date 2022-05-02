@@ -40,3 +40,8 @@ earth_movers_distance/x64/
 interpolation/image_processing/Cargo.lock
 interpolation/image_processing/outputs/*
 interpolation/image_processing/target/*
+earth_movers_distance/python/histogram.jpg
+earth_movers_distance/histograms/mountain_1.txt
+earth_movers_distance/histograms/mountain_2.txt
+earth_movers_distance/histograms/sea_1.txt
+earth_movers_distance/histograms/sea_2.txt

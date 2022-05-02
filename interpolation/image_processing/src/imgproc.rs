@@ -76,17 +76,17 @@ pub fn resize_with_bilinear(src: &image::Rgb32FImage, scale: f32) -> image::RgbI
         let fy = j as f32 / scale; // 元画像における位置を計算(不動小数点)
         let mut y0 = fy as u32;
         y0 = cap(y0, src_h);
-        let s = fy - (y0 as f32);
+        let y = fy - (y0 as f32);
         let mut y1 = y0 + 1;
         y1 = cap(y1, src_h);
         for i in 0..dst_w {
             let fx = i as f32 / scale; // 元画像における位置を計算(不動小数点)
             let mut x0 = fx as u32;
             x0 = cap(x0, src_w);
-            let t = fx - x0 as f32;
+            let x = fx - x0 as f32;
             let mut x1 = x0 + 1;
             x1 = cap(x1, src_w);
-            let dp = make_color_by_bilinear(y0, y1, x0, x1, s, t, src);
+            let dp = make_color_by_bilinear(y0, y1, x0, x1, y, x, src);
             dst.put_pixel(i, j, dp);
         }
     }    
