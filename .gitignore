@@ -37,3 +37,6 @@ earth_movers_distance/images/
 earth_movers_distance/.vs/
 earth_movers_distance/x64/
 .vs/
+interpolation/image_processing/Cargo.lock
+interpolation/image_processing/outputs/*
+interpolation/image_processing/target/*
