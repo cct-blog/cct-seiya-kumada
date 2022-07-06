@@ -12,21 +12,14 @@ def model(params, x):
     return params["a"] * x + params["b"]
 
 
-@jax.jit
 def loss(params, x, y):
     y_pred = model(params, x)
     return jnp.power(y_pred - y, 2).mean()
 
 
-# update params
-def optimize(params, grads, lr):
-    d = {}
-    # type(grads[0]) == dict
-    # kp = ("a", "b")
-    # vg is derivative value
-    for (kp, vp), (_, vg) in zip(params.items(), grads[0].items()):
-        d[kp] = vp - lr * vg
-    return d
+# update "params"
+def update(params, grads, lr):
+    return jax.tree_map(lambda p, g: p - lr * g, params, grads[0])
 
 
 def create_dataset(a, b, n, seed):
@@ -36,26 +29,35 @@ def create_dataset(a, b, n, seed):
     return jnp.array(x), jnp.array(y)
 
 
-# differentiate loss with its first argument
+# differentiate "loss" with its first argument
 grad_loss = jax.grad(loss, argnums=[0])
 
 
-def core_fun(idx, params):
+@jax.jit
+def train_(x, y, params):
     # d(loss)/dx
     grads = grad_loss(params, x, y)
-    # update params
-    params = optimize(params, grads, lr)
+    # update "params"
+    params = update(params, grads, lr)
     return params
 
 
 @jax.jit
 def train(epochs, x, y, lr, params):
-    params = jax.lax.fori_loop(0, epochs, core_fun, params)
+    def body_fun(idx, params):
+        # d(loss)/dx
+        grads = grad_loss(params, x, y)
+        # update params
+        params = update(params, grads, lr)
+        return params
+
+    params = jax.lax.fori_loop(0, epochs, body_fun, params)
     return params
-    #val = params
-    #for i in range(0, epochs):
-    #    val = core_fun(i, params)
-    #return val
+    # "fori_loop" is equivalent to the following codes:
+    # val = params
+    # for i in range(0, epochs):
+    #    val = body_fun(i, params)
+    # return val
 
 
 def display_line(x, y, params):
@@ -65,10 +67,11 @@ def display_line(x, y, params):
     xs = np.linspace(0, 1, 100)
     ys = model(params, xs)
     plt.plot(xs, ys)
-    plt.savefig("./fig_2.jpg")
+    plt.savefig("./fig_with_jax.jpg")
 
 
 if __name__ == "__main__":
+
     args = sys.argv
 
     # create dataset
@@ -84,6 +87,8 @@ if __name__ == "__main__":
     # set hyperparameters
     epochs = 10000
     lr = 1.0e-3
+
+    # train
     if len(args) == 2 and args[1] == "fori":
         # run using fori!
         start = time.time()
@@ -92,7 +97,7 @@ if __name__ == "__main__":
     else:
         start = time.time()
         for _ in range(epochs):
-            params = core_fun(_, params)
+            params = train_(x, y, params)
         end = time.time()
 
     print(f"{end - start}[sec]")

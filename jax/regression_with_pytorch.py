@@ -37,7 +37,7 @@ def display_x_and_y(x, y):
     plt.scatter(x, y)
     plt.xlabel("x")
     plt.ylabel("y")
-    plt.savefig("./fig_1.jpg")
+    plt.savefig("./fig_dataset.jpg")
 
 
 def display_line(x, y, a, b):
@@ -47,8 +47,7 @@ def display_line(x, y, a, b):
     xs = np.linspace(0, 1, 100)
     ys = model(xs, a, b)
     plt.plot(xs, ys)
-    plt.savefig("./fig_2.jpg")
-
+    plt.savefig("./fig_with_pytorch.jpg")
 
 
 if __name__ == "__main__":
@@ -59,8 +58,9 @@ if __name__ == "__main__":
     true_b = 1
     x, y = create_dataset(true_a, true_b, N, seed)
 
-    # display_x_and_y(x, y)
+    display_x_and_y(x, y)
 
+    # initialize params
     a = torch.tensor([1.0], requires_grad=True)
     b = torch.tensor([0.0], requires_grad=True)
 
