@@ -14,7 +14,7 @@ import arviz as az
 DATA_PATH = "./data/data.txt"
 TRACE_PATH = "./trace.nc"
 X_DIM = 10
-TRAIN_SIZE = 100
+TRAIN_SIZE = 300
 SAMPLE_SIZE = 1000
 
 
@@ -50,8 +50,8 @@ def define_model(xs: NDArray[np.float32], ys: NDArray[np.float32]) -> Any:
 
 if __name__ == "__main__":
     train_xs, train_ys, test_xs, test_ys = load_dataset(DATA_PATH, TRAIN_SIZE)
-    # print(f"train x shape: {train_xs.shape}, train y shape: {train_ys.shape}")
-    # print(f"test x shape: {test_xs.shape}, test y shape: {test_ys.shape}")
+    print(f"train x shape: {train_xs.shape}, train y shape: {train_ys.shape}")
+    print(f"test x shape: {test_xs.shape}, test y shape: {test_ys.shape}")
     model, gp = define_model(train_xs, train_ys)
 
     start = time.time()
@@ -69,7 +69,5 @@ if __name__ == "__main__":
     pred_ys = pred_samples["f_pred"]
     pred_mean_ys = np.mean(pred_ys, axis=0)
     pred_std_ys = np.std(pred_ys, axis=0)
-    plt.scatter(test_ys, pred_mean_ys, color="b")
     plt.errorbar(test_ys, pred_mean_ys, yerr=pred_std_ys, fmt="o")
-
     plt.show()
