@@ -48,3 +48,4 @@ earth_movers_distance/histograms/sea_2.txt
 jax/*.jpg
 jax/flake8.txt
 gaussian_process/src/__pycache__/main.cpython-39.pyc
+gaussian_process/trace.nc
