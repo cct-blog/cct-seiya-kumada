@@ -1,3 +1,4 @@
+from re import I
 import pandas as pd
 import scipy.stats as stats
 from typing import Tuple, Any
@@ -14,7 +15,7 @@ import arviz as az
 DATA_PATH = "./data/data.txt"
 TRACE_PATH = "./trace.nc"
 X_DIM = 10
-TRAIN_SIZE = 300
+TRAIN_SIZE = 20
 SAMPLE_SIZE = 1000
 
 
@@ -43,33 +44,37 @@ def define_model(xs: NDArray[np.float32], ys: NDArray[np.float32]) -> Any:
         gp = pm.gp.Latent(cov_func=cov)
         f = gp.prior("f", X=xs)
         sigma = pm.HalfCauchy("sigma", beta=5)
+        # cov = sigma**2 * np.eye(TRAIN_SIZE, TRAIN_SIZE)
         nu = pm.Gamma("nu", alpha=2, beta=0.1)
         pm.StudentT("y", mu=f, lam=1.0 / sigma, nu=nu, observed=ys)
+        # pm.MvNormal("y", mu=f, cov=cov, observed=ys)
     return model, gp
 
 
 if __name__ == "__main__":
     train_xs, train_ys, test_xs, test_ys = load_dataset(DATA_PATH, TRAIN_SIZE)
     # print(f"train x shape: {train_xs.shape}, train y shape: {train_ys.shape}")
+    # test_xs = test_xs[:10, :]
+    # test_ys = test_ys[:10]
     # print(f"test x shape: {test_xs.shape}, test y shape: {test_ys.shape}")
     model, gp = define_model(train_xs, train_ys)
 
-    # start = time.time()
-    # with model:
-    #    trace = pm.sample(SAMPLE_SIZE, cores=1, return_inferencedata=True)
-    # end = time.time()
-    # print(f"{end - start}[sec]")
-    ## 322[sec]
-    # trace.to_netcdf(TRACE_PATH)
+    start = time.time()
+    with model:
+        trace = pm.sample(SAMPLE_SIZE, cores=1, return_inferencedata=True)
+    end = time.time()
+    print(f"{end - start}[sec]")
+    # 322[sec]
+    trace.to_netcdf(TRACE_PATH)
     trace = az.from_netcdf(TRACE_PATH)  # type:ignore
     with model:
-        f_pred = gp.conditional("f_pred", test_xs)
+        f_pred = gp.conditional("f_pred", train_xs)
         pred_samples = pm.sample_posterior_predictive(trace, var_names=["f_pred"], samples=100)
 
     pred_ys = pred_samples["f_pred"]
     pred_mean_ys = np.mean(pred_ys, axis=0)
     pred_std_ys = np.std(pred_ys, axis=0)
-    plt.errorbar(test_ys, pred_mean_ys, yerr=pred_std_ys, fmt="o")
+    plt.errorbar(train_ys, pred_mean_ys, yerr=pred_std_ys, fmt="o")
     xvalues = np.linspace(0, 400, 100)
     yvalues = np.linspace(0, 400, 100)
     plt.plot(xvalues, yvalues, linestyle="dashed")
