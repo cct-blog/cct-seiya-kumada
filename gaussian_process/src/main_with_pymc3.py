@@ -1,11 +1,11 @@
-from re import I
-import pandas as pd
-import scipy.stats as stats
-from typing import Tuple, Any
+# import pandas as pd
+# import scipy.stats as stats
+# from typing import Tuple, Any
+from typing import Any
 import numpy as np
 from numpy.typing import NDArray
 import pymc3 as pm
-
+import src.util as util
 
 import time
 
@@ -14,33 +14,16 @@ import arviz as az
 
 DATA_PATH = "./data/data.txt"
 TRACE_PATH = "./trace.nc"
-X_DIM = 10
-TRAIN_SIZE = 20
+# X_DIM = 10
+# TRAIN_SIZE = 10
 SAMPLE_SIZE = 1000
-
-
-def load_dataset(
-    path: str, train_size: int
-) -> Tuple[NDArray[np.float32], NDArray[np.float32], NDArray[np.float32], NDArray[np.float32]]:
-    df = pd.read_table(path)
-    ds = df.to_numpy()
-    ys = ds[:, X_DIM]
-    xs = ds[:, :X_DIM]
-    xs = stats.zscore(xs)
-
-    train_xs = xs[:TRAIN_SIZE, :]
-    test_xs = xs[TRAIN_SIZE:, :]
-    train_ys = ys[:TRAIN_SIZE]
-    test_ys = ys[TRAIN_SIZE:]
-
-    return train_xs, train_ys, test_xs, test_ys
 
 
 def define_model(xs: NDArray[np.float32], ys: NDArray[np.float32]) -> Any:
     with pm.Model() as model:
         el = pm.Gamma("el", alpha=2, beta=1)
         eta = pm.HalfCauchy("eta", beta=5)
-        cov = eta**2 * pm.gp.cov.Matern52(X_DIM, el)
+        cov = eta**2 * pm.gp.cov.Matern52(util.X_DIM, el)
         gp = pm.gp.Latent(cov_func=cov)
         f = gp.prior("f", X=xs)
         sigma = pm.HalfCauchy("sigma", beta=5)
@@ -52,7 +35,9 @@ def define_model(xs: NDArray[np.float32], ys: NDArray[np.float32]) -> Any:
 
 
 if __name__ == "__main__":
-    train_xs, train_ys, test_xs, test_ys = load_dataset(DATA_PATH, TRAIN_SIZE)
+    train_xs, train_ys, test_xs, test_ys = util.load_dataset(
+        DATA_PATH, util.TRAIN_SIZE
+    )
     # print(f"train x shape: {train_xs.shape}, train y shape: {train_ys.shape}")
     # test_xs = test_xs[:10, :]
     # test_ys = test_ys[:10]
@@ -69,7 +54,9 @@ if __name__ == "__main__":
     trace = az.from_netcdf(TRACE_PATH)  # type:ignore
     with model:
         f_pred = gp.conditional("f_pred", train_xs)
-        pred_samples = pm.sample_posterior_predictive(trace, var_names=["f_pred"], samples=100)
+        pred_samples = pm.sample_posterior_predictive(
+            trace, var_names=["f_pred"], samples=100
+        )
 
     pred_ys = pred_samples["f_pred"]
     pred_mean_ys = np.mean(pred_ys, axis=0)
@@ -81,4 +68,4 @@ if __name__ == "__main__":
     plt.xlabel("ground truth")
     plt.ylabel("prediction")
     plt.legend(loc="best")
-    plt.savefig("./result.jpg")
+    plt.savefig("./result_with_pymc3.jpg")
