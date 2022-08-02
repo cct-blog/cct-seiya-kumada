@@ -50,17 +50,17 @@ def define_model(xs: NDArray[np.float32], ys: NDArray[np.float32]) -> Any:
 
 if __name__ == "__main__":
     train_xs, train_ys, test_xs, test_ys = load_dataset(DATA_PATH, TRAIN_SIZE)
-    print(f"train x shape: {train_xs.shape}, train y shape: {train_ys.shape}")
-    print(f"test x shape: {test_xs.shape}, test y shape: {test_ys.shape}")
+    # print(f"train x shape: {train_xs.shape}, train y shape: {train_ys.shape}")
+    # print(f"test x shape: {test_xs.shape}, test y shape: {test_ys.shape}")
     model, gp = define_model(train_xs, train_ys)
 
-    start = time.time()
-    with model:
-        trace = pm.sample(SAMPLE_SIZE, cores=1, return_inferencedata=True)
-    end = time.time()
-    print(f"{end - start}[sec]")
-    # 322[sec]
-    trace.to_netcdf(TRACE_PATH)
+    # start = time.time()
+    # with model:
+    #    trace = pm.sample(SAMPLE_SIZE, cores=1, return_inferencedata=True)
+    # end = time.time()
+    # print(f"{end - start}[sec]")
+    ## 322[sec]
+    # trace.to_netcdf(TRACE_PATH)
     trace = az.from_netcdf(TRACE_PATH)  # type:ignore
     with model:
         f_pred = gp.conditional("f_pred", test_xs)
@@ -70,4 +70,10 @@ if __name__ == "__main__":
     pred_mean_ys = np.mean(pred_ys, axis=0)
     pred_std_ys = np.std(pred_ys, axis=0)
     plt.errorbar(test_ys, pred_mean_ys, yerr=pred_std_ys, fmt="o")
-    plt.show()
+    xvalues = np.linspace(0, 400, 100)
+    yvalues = np.linspace(0, 400, 100)
+    plt.plot(xvalues, yvalues, linestyle="dashed")
+    plt.xlabel("ground truth")
+    plt.ylabel("prediction")
+    plt.legend(loc="best")
+    plt.savefig("./result.jpg")
