@@ -30,12 +30,36 @@ def load_dataset(
     return train_xs, train_ys, test_xs, test_ys
 
 
-if __name__ == "__main__":
+def load_dataset_with_high_correlation(
+    path: str, train_size: int
+) -> Tuple[
+    NDArray[np.float32],
+    NDArray[np.float32],
+    NDArray[np.float32],
+    NDArray[np.float32],
+]:
+    df = pd.read_table(path)
+    ds = df.to_numpy()
+    ys = ds[:, X_DIM]
+    xs = ds[:, :X_DIM]
+    rows, cols = xs.shape
+    new_xs = np.ndarray((rows, 2), dtype=np.float64)
+    new_xs[:, 0] = xs[:, 2]
+    new_xs[:, 1] = xs[:, 8]
+    new_xs = stats.zscore(new_xs)
+    train_xs = new_xs[:train_size, :]
+    test_xs = new_xs[train_size:, :]
+    train_ys = ys[:train_size]
+    test_ys = ys[train_size:]
+
+    return train_xs, train_ys, test_xs, test_ys
+
+
+def make_heat_map(data_path: str) -> None:
     import seaborn as sns
     import matplotlib.pyplot as plt
 
-    DATA_PATH = "./data/data.txt"
-    df = pd.read_table(DATA_PATH)
+    df = pd.read_table(data_path)
     ds = df.to_numpy()
     print(ds.shape)
     cs = np.corrcoef(ds.transpose())
@@ -45,4 +69,12 @@ if __name__ == "__main__":
 
     # グラフを表示する
     plt.savefig("heatmap.jpg")
+
+
+if __name__ == "__main__":
+    DATA_PATH = "./data/data.txt"
+    # ヒートマップを作る。
+    # make_heat_map(DATA_PATH)
     # Yと相関が強いのは BMIとS5の２つ。まずはこの２つでやってみる。
+    train_xs, train_ys, test_xs, test_ys = load_dataset(DATA_PATH, 10)
+    print(train_xs.dtype, train_ys.dtype)

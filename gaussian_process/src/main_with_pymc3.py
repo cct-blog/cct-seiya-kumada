@@ -14,16 +14,15 @@ import arviz as az
 
 DATA_PATH = "./data/data.txt"
 TRACE_PATH = "./trace.nc"
-# X_DIM = 10
-# TRAIN_SIZE = 10
 SAMPLE_SIZE = 1000
 
 
 def define_model(xs: NDArray[np.float32], ys: NDArray[np.float32]) -> Any:
+    _, x_dim = xs.shape
     with pm.Model() as model:
         el = pm.Gamma("el", alpha=2, beta=1)
         eta = pm.HalfCauchy("eta", beta=5)
-        cov = eta**2 * pm.gp.cov.Matern52(util.X_DIM, el)
+        cov = eta**2 * pm.gp.cov.Matern52(x_dim, el)
         gp = pm.gp.Latent(cov_func=cov)
         f = gp.prior("f", X=xs)
         sigma = pm.HalfCauchy("sigma", beta=5)
@@ -35,9 +34,12 @@ def define_model(xs: NDArray[np.float32], ys: NDArray[np.float32]) -> Any:
 
 
 if __name__ == "__main__":
-    train_xs, train_ys, test_xs, test_ys = util.load_dataset(
-        DATA_PATH, util.TRAIN_SIZE
-    )
+    (
+        train_xs,
+        train_ys,
+        test_xs,
+        test_ys,
+    ) = util.load_dataset(DATA_PATH, util.TRAIN_SIZE)
     # print(f"train x shape: {train_xs.shape}, train y shape: {train_ys.shape}")
     # test_xs = test_xs[:10, :]
     # test_ys = test_ys[:10]
