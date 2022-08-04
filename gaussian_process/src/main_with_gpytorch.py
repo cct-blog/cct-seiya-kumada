@@ -1,11 +1,14 @@
 import gpytorch
-from typing import Any
+from typing import Any, Tuple
 import src.util as util
 import torch
 import matplotlib.pyplot as plt
 import numpy as np
 
-DATA_PATH = "./data/data.txt"
+# https://docs.gpytorch.ai/en/latest/examples/04_Variational_and_Approximate_GPs/Approximate_GP_Objective_Functions.html
+from gpytorch.variational import VariationalStrategy
+from gpytorch.variational import CholeskyVariationalDistribution
+
 TRAINING_ITER = 5000
 INTERVAL_NUM = 100
 MODEL_PATH = "./model.state"
@@ -21,7 +24,8 @@ def save_models(optimizer: Any, model: Any, iter: int) -> None:
     )
 
 
-class GPModel(gpytorch.models.ExactGP):  # type:ignore
+# class GPModel(gpytorch.models.ExactGP):  # type:ignore
+class GPModel(gpytorch.models.ApproximateGP):  # type:ignore
     def __init__(
         self,
         train_x: Any,
@@ -30,11 +34,22 @@ class GPModel(gpytorch.models.ExactGP):  # type:ignore
         lengthscale_prior: Any = None,
         outputscale_prior: Any = None,
     ):
-        super(GPModel, self).__init__(train_x, train_y, likelihood)
+        # super(GPModel, self).__init__(train_x, train_y, likelihood)
+        variational_distribution = CholeskyVariationalDistribution(
+            train_x.size(0)
+        )
+        variational_strategy = VariationalStrategy(
+            self,
+            train_x,
+            variational_distribution,
+            learn_inducing_locations=True,
+        )
+        super(GPModel, self).__init__(variational_strategy)
         self.mean_module = gpytorch.means.ConstantMean()
         self.covar_module = gpytorch.kernels.ScaleKernel(
-            gpytorch.kernels.RBFKernel(lengthscale_prior=lengthscale_prior),
-            outputscale_prior=outputscale_prior,
+            # gpytorch.kernels.RBFKernel(lengthscale_prior=lengthscale_prior),
+            # outputscale_prior=outputscale_prior,
+            gpytorch.kernels.RBFKernel()
         )
 
     def forward(self, x: Any) -> Any:
@@ -68,7 +83,8 @@ def train(
                     training_iter,
                     loss.item(),
                     model.covar_module.base_kernel.lengthscale.item(),
-                    model.likelihood.noise.item(),
+                    # model.likelihood.noise.item(),
+                    0.0,
                 )
             )
         optimizer.step()
@@ -93,18 +109,10 @@ def save_result(observed_pred: Any, train_ys: Any) -> None:
         plt.savefig("./result_with_gpytorch.jpg")
 
 
-if __name__ == "__main__":
-    (
-        train_xs,
-        train_ys,
-        test_xs,
-        test_ys,
-    ) = util.load_dataset(DATA_PATH, util.TRAIN_SIZE)
+def define_model(torch_xs: Any, torch_ys: Any) -> Tuple[Any, Any]:
 
     likelihood = gpytorch.likelihoods.GaussianLikelihood()
     # likelihood = gpytorch.likelihoods.StudentTLikelihood()
-    torch_xs = torch.tensor(train_xs)
-    torch_ys = torch.tensor(train_ys)
 
     l_prior = gpytorch.priors.NormalPrior(
         loc=torch.tensor(1.0), scale=torch.tensor(10.0)
@@ -121,6 +129,21 @@ if __name__ == "__main__":
         lengthscale_prior=l_prior,
         outputscale_prior=s_prior,
     )
+    return model, likelihood
+
+
+if __name__ == "__main__":
+    (
+        train_xs,
+        train_ys,
+        test_xs,
+        test_ys,
+    ) = util.load_dataset_with_high_correlation(util.DATA_PATH, util.TRAIN_SIZE)
+
+    torch_train_xs = torch.tensor(train_xs)
+    torch_train_ys = torch.tensor(train_ys)
+
+    model, likelihood = define_model(torch_train_xs, torch_train_ys)
 
     # Find optimal model hyperparameters
     model.train()
@@ -137,9 +160,19 @@ if __name__ == "__main__":
     )
 
     # "Loss" for GPs - the marginal log likelihood
-    mll = gpytorch.mlls.ExactMarginalLogLikelihood(likelihood, model)
+    # mll = gpytorch.mlls.ExactMarginalLogLikelihood(likelihood, model)
+    mll = gpytorch.mlls.VariationalELBO(
+        likelihood, model, torch_train_ys.numel()
+    )
+
     train(
-        TRAINING_ITER, INTERVAL_NUM, torch_xs, torch_ys, model, optimizer, mll
+        TRAINING_ITER,
+        INTERVAL_NUM,
+        torch_train_xs,
+        torch_train_ys,
+        model,
+        optimizer,
+        mll,
     )
     save_models(optimizer, model, TRAINING_ITER)
 
@@ -147,10 +180,12 @@ if __name__ == "__main__":
     model.eval()
     likelihood.eval()
 
+    torch_test_xs = torch.tensor(test_xs)
+    torch_test_ys = torch.tensor(test_ys)
     # Test points are regularly spaced along [0,1]
     # Make predictions by feeding model through likelihood
     with torch.no_grad(), gpytorch.settings.fast_pred_var():
         # test_x = torch.linspace(0, 1, 51)
-        observed_pred = likelihood(model(torch_xs))
+        observed_pred = likelihood(model(torch_test_xs))
 
-    save_result(observed_pred, train_ys)
+    save_result(observed_pred, torch_test_ys)

@@ -59,3 +59,4 @@ gaussian_process/src/__pycache__/main_with_pymc3.cpython-39.pyc
 gaussian_process/src/__pycache__/util.cpython-39.pyc
 gaussian_process/iter_5000.state
 gaussian_process/iter_10000.state
+gaussian_process/iter_100000.state
