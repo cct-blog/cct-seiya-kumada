@@ -60,3 +60,8 @@ gaussian_process/src/__pycache__/util.cpython-39.pyc
 gaussian_process/iter_5000.state
 gaussian_process/iter_10000.state
 gaussian_process/iter_100000.state
+gaussian_process/losses_test.jpg
+gaussian_process/losses.jpg
+gaussian_process/model.state
+gaussian_process/result_with_gpytorch_test.jpg
+gaussian_process/result_with_gpytorch_train.jpg

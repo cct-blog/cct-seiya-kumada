@@ -1,5 +1,5 @@
 import gpytorch
-from typing import Any, Tuple
+from typing import Any, Tuple, List
 import src.util as util
 import torch
 import matplotlib.pyplot as plt
@@ -12,16 +12,6 @@ from gpytorch.variational import CholeskyVariationalDistribution
 TRAINING_ITER = 5000
 INTERVAL_NUM = 100
 MODEL_PATH = "./model.state"
-
-
-def save_models(optimizer: Any, model: Any, iter: int) -> None:
-    torch.save(
-        {
-            "model_state_dict": model.state_dict(),
-            "optimizer_state_dict": optimizer.state_dict(),
-        },
-        "./iter_{}.state".format(iter),
-    )
 
 
 # class GPModel(gpytorch.models.ExactGP):  # type:ignore
@@ -66,7 +56,8 @@ def train(
     model: Any,
     optimizer: Any,
     mll: Any,
-) -> None:
+) -> List[float]:
+    losses = []
     for i in range(training_iter):
         # Zero gradients from previous iteration
         optimizer.zero_grad()
@@ -88,6 +79,9 @@ def train(
                 )
             )
         optimizer.step()
+        losses.append(loss.item())
+        # lossをためて図示せよ。
+    return losses
 
 
 def save_result(observed_pred: Any, train_ys: Any) -> None:
@@ -132,6 +126,29 @@ def define_model(torch_xs: Any, torch_ys: Any) -> Tuple[Any, Any]:
     return model, likelihood
 
 
+def plot_losses(losses: List[float]) -> None:
+    plt.plot(losses)
+    plt.xlabel("iteration")
+    plt.ylabel("loss")
+    plt.savefig("./losses.jpg")
+    plt.clf()
+
+
+def save_models(optimizer: Any, model: Any, iter: int, path: str) -> None:
+    torch.save(
+        {
+            "model_state_dict": model.state_dict(),
+            "optimizer_state_dict": optimizer.state_dict(),
+        },
+        path,
+    )
+
+
+def load_model(model_path: str, model: Any) -> None:
+    checkpoint = torch.load(model_path)  # type:ignore
+    model.load_state_dict(checkpoint["model_state_dict"])
+
+
 if __name__ == "__main__":
     (
         train_xs,
@@ -165,16 +182,21 @@ if __name__ == "__main__":
         likelihood, model, torch_train_ys.numel()
     )
 
-    train(
-        TRAINING_ITER,
-        INTERVAL_NUM,
-        torch_train_xs,
-        torch_train_ys,
-        model,
-        optimizer,
-        mll,
-    )
-    save_models(optimizer, model, TRAINING_ITER)
+    if False:
+        losses = train(
+            TRAINING_ITER,
+            INTERVAL_NUM,
+            torch_train_xs,
+            torch_train_ys,
+            model,
+            optimizer,
+            mll,
+        )
+        save_models(optimizer, model, TRAINING_ITER, MODEL_PATH)
+        plot_losses(losses)
+    else:
+        # resume
+        load_model(MODEL_PATH, model)
 
     # Get into evaluation (predictive posterior) mode
     model.eval()
