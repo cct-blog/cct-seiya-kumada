@@ -28,7 +28,12 @@ def load_dataset(
     train_ys = ys[:train_size]
     test_ys = ys[train_size:]
 
-    return train_xs, train_ys, test_xs, test_ys
+    return (
+        train_xs.astype(np.float32),
+        train_ys.astype(np.float32),
+        test_xs.astype(np.float32),
+        test_ys.astype(np.float32),
+    )
 
 
 def load_dataset_with_high_correlation(
@@ -44,7 +49,7 @@ def load_dataset_with_high_correlation(
     ys = ds[:, X_DIM]
     xs = ds[:, :X_DIM]
     rows, cols = xs.shape
-    new_xs = np.ndarray((rows, 2), dtype=np.float32)
+    new_xs: NDArray[np.float32] = np.ndarray((rows, 2), dtype=np.float32)
     new_xs[:, 0] = xs[:, 2]
     new_xs[:, 1] = xs[:, 8]
     # new_xs[:, 2] = xs[:, 3]

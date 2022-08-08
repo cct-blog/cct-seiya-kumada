@@ -1,6 +1,6 @@
 # import pandas as pd
 # import scipy.stats as stats
-from typing import Tuple, Any
+from typing import Any
 import numpy as np
 from numpy.typing import NDArray
 import pymc3 as pm
