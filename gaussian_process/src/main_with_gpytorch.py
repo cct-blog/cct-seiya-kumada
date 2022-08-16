@@ -9,7 +9,7 @@ import numpy as np
 from gpytorch.variational import VariationalStrategy
 from gpytorch.variational import CholeskyVariationalDistribution
 
-TRAINING_ITER = 5000
+TRAINING_ITER = 2000
 INTERVAL_NUM = 100
 MODEL_PATH = "./model.state"
 
@@ -25,9 +25,7 @@ class GPModel(gpytorch.models.ApproximateGP):  # type:ignore
         outputscale_prior: Any = None,
     ):
         # super(GPModel, self).__init__(train_x, train_y, likelihood)
-        variational_distribution = CholeskyVariationalDistribution(
-            train_x.size(0)
-        )
+        variational_distribution = CholeskyVariationalDistribution(train_x.size(0))
         variational_strategy = VariationalStrategy(
             self,
             train_x,
@@ -155,7 +153,7 @@ if __name__ == "__main__":
         train_ys,
         test_xs,
         test_ys,
-    ) = util.load_dataset_with_high_correlation(util.DATA_PATH, util.TRAIN_SIZE)
+    ) = util.load_dataset(util.DATA_PATH, util.TRAIN_SIZE)
 
     torch_train_xs = torch.tensor(train_xs)
     torch_train_ys = torch.tensor(train_ys)
@@ -169,20 +167,16 @@ if __name__ == "__main__":
     # Use the adam optimizer
     optimizer = torch.optim.Adam(
         [
-            {
-                "params": model.parameters()
-            },  # Includes GaussianLikelihood parameters
+            {"params": model.parameters()},  # Includes GaussianLikelihood parameters
         ],
         lr=0.1,
     )
 
     # "Loss" for GPs - the marginal log likelihood
     # mll = gpytorch.mlls.ExactMarginalLogLikelihood(likelihood, model)
-    mll = gpytorch.mlls.VariationalELBO(
-        likelihood, model, torch_train_ys.numel()
-    )
+    mll = gpytorch.mlls.VariationalELBO(likelihood, model, torch_train_ys.numel())
 
-    if False:
+    if True:
         losses = train(
             TRAINING_ITER,
             INTERVAL_NUM,

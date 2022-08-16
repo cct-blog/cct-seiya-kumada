@@ -70,3 +70,6 @@ gaussian_process/src/__pycache__/pytorch_model.cpython-39.pyc
 gaussian_process/pytorch_model.pth
 gaussian_process/pred_pytorch.jpg
 gaussian_process/loss_pytorch.jpg
+gaussian_process/src/__pycache__/main_base.cpython-39.pyc
+gaussian_process/heatmap_house.jpg
+gaussian_process/base.jpg

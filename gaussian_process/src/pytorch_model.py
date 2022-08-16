@@ -131,9 +131,7 @@ def execute(
     train_torch_ys = torch.from_numpy(train_ys).unsqueeze(-1)
 
     # 訓練
-    loss_list = train(
-        optimizer, model_torch, loss_func, train_torch_xs, train_torch_ys
-    )
+    loss_list = train(optimizer, model_torch, loss_func, train_torch_xs, train_torch_ys)
 
     # 損失関数の可視化
     save_loss_graph(loss_list, loss_path)

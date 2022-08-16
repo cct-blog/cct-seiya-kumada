@@ -23,19 +23,25 @@ def model(X, Y, h1, h2):
     D_X = X.shape[1]  # X.shape = (N,D)
 
     # 第1層の重みをサンプリング
-    w1 = numpyro.sample("w1", dist.Normal(jnp.zeros((D_X, h1)), 10.0 * jnp.ones((D_X, h1))).to_event(2))
+    w1 = numpyro.sample(
+        "w1", dist.Normal(jnp.zeros((D_X, h1)), 10.0 * jnp.ones((D_X, h1))).to_event(2)
+    )
     # w1.shape = (D,H1)
     # 第1層の線形結合と非線形変換
     z1 = relu(jnp.matmul(X, w1))  # (N,H1)
 
     # 第2層の重みをサンプリング
-    w2 = numpyro.sample("w2", dist.Normal(jnp.zeros((h1, h2)), 10.0 * jnp.ones((h1, h2))).to_event(2))
+    w2 = numpyro.sample(
+        "w2", dist.Normal(jnp.zeros((h1, h2)), 10.0 * jnp.ones((h1, h2))).to_event(2)
+    )
     # w2.shape = (H1,H2)
     # 第2層の線形結合と非線形変換
     z2 = relu(jnp.matmul(z1, w2))  # (N,H2)
 
     # 出力層の重みをサンプリング
-    w3 = numpyro.sample("w3", dist.Normal(jnp.zeros((h2, 1)), 10.0 * jnp.ones((h2, 1))).to_event(2))
+    w3 = numpyro.sample(
+        "w3", dist.Normal(jnp.zeros((h2, 1)), 10.0 * jnp.ones((h2, 1))).to_event(2)
+    )
     # w3.shape = (H2,1)
     # 出力層の線形結合と非線形変換
     z3 = jnp.matmul(z2, w3)  # (N,1)
@@ -53,12 +59,26 @@ def model(X, Y, h1, h2):
 # NUTによるMCMCの設定
 def run_inference(model, rng_key, X, Y, h1, h2):
     kernel = NUTS(model)
-    mcmc = MCMC(kernel, num_warmup=1000, num_samples=2000, num_chains=1,)
+    mcmc = MCMC(
+        kernel,
+        num_warmup=1000,
+        num_samples=2000,
+        num_chains=1,
+    )
     mcmc.run(rng_key, X, Y, h1, h2)
     return mcmc.get_samples()
 
 
-def save_predictions(predictive, rng_key_predict, x_data, y_data, x_linspace, y_linspace, x_new, model_path):
+def save_predictions(
+    predictive,
+    rng_key_predict,
+    x_data,
+    y_data,
+    x_linspace,
+    y_linspace,
+    x_new,
+    model_path,
+):
 
     # 新規データ
     x_new = jnp.linspace(-2.0, 2.0, 1000)[:, jnp.newaxis]
@@ -77,7 +97,14 @@ def save_predictions(predictive, rng_key_predict, x_data, y_data, x_linspace, y_
     # 予測分布の平均
     ax.plot(x_new, y_pred_mean, label="mean")
     # 予測分布の90パーセンタイル
-    ax.fill_between(x_new.squeeze(-1), percentiles[0, :], percentiles[1, :], alpha=0.5, label="90percentile", color="orange")
+    ax.fill_between(
+        x_new.squeeze(-1),
+        percentiles[0, :],
+        percentiles[1, :],
+        alpha=0.5,
+        label="90percentile",
+        color="orange",
+    )
 
     ax.set_xlabel(r"$x$")
     ax.set_ylabel(r"$x$")
@@ -101,4 +128,13 @@ def execute(x_data, y_data, x_linspace, y_linspace, x_new, loss_path, model_path
     # MCMCサンプルを利用した予測分布
     predictive = Predictive(model, samples)
 
-    save_predictions(predictive, rng_key_predict, x_data, y_data, x_linspace, y_linspace, x_new, model_path)
+    save_predictions(
+        predictive,
+        rng_key_predict,
+        x_data,
+        y_data,
+        x_linspace,
+        y_linspace,
+        x_new,
+        model_path,
+    )

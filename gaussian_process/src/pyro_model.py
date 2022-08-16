@@ -4,6 +4,8 @@ import pyro
 import pyro.distributions as dist
 import torch
 import torch.nn as nn
+from typing import Any, List, Tuple
+from numpy.typing import NDArray
 
 # import torch.nn.functional as F
 from pyro.infer import SVI, Predictive, Trace_ELBO
@@ -18,9 +20,9 @@ H1, H2 = 10, 10
 # batch_shape:パラメータが異なる複数の確率分布をまとめて扱う場合の確率分布の数
 
 
-class Model(PyroModule):
+class Model(PyroModule):  # type:ignore
     # 各コンポーネントを定義
-    def __init__(self, h1=H1, h2=H2):
+    def __init__(self, h1: int = H1, h2: int = H2):
         super().__init__()
         # 第1層（確率変数のbatchshapeをeventshapeにする）
         self.fc1 = PyroModule[nn.Linear](1, h1)
@@ -33,7 +35,9 @@ class Model(PyroModule):
 
         # 第2層
         self.fc2 = PyroModule[nn.Linear](h1, h2)
-        self.fc2.weight = PyroSample(dist.Normal(0.0, 10.0).expand([h2, h1]).to_event(2))
+        self.fc2.weight = PyroSample(
+            dist.Normal(0.0, 10.0).expand([h2, h1]).to_event(2)
+        )
         self.fc2.bias = PyroSample(dist.Normal(0.0, 10.0).expand([h2]).to_event(1))
         # 出力層
         self.fc3 = PyroModule[nn.Linear](h2, 1)
@@ -42,24 +46,30 @@ class Model(PyroModule):
         self.relu = nn.ReLU()
 
     # データの生成過程を記述
-    def forward(self, X, Y=None, h1=H1, h2=H2):
+    def forward(
+        self,
+        X: torch.Tensor,
+        Y: Any = None,
+        h1: int = H1,
+        h2: int = H2,
+    ) -> torch.Tensor:
         # ニューラルネットワークの出力
         X = self.relu(self.fc1(X))
         X = self.relu(self.fc2(X))
         # NNでガウス分布の平均を求める。
-        mu = self.fc3(X)
+        mu: torch.Tensor = self.fc3(X)
         # 観測ノイズの標準偏差をサンプリング。これは学習しない。その都度サイコロをふる。
         sigma = pyro.sample("sigma", dist.Uniform(0.0, 2.0))
         # 尤度の積
         with pyro.plate("data", X.shape[0]):  # 独立同分布であることを表現している。
             # shapeが(N, 1)であるため, 右の1をeventshapeにする
-            obs = pyro.sample("Y", dist.Normal(mu, sigma).to_event(1), obs=Y)
+            _ = pyro.sample("Y", dist.Normal(mu, sigma).to_event(1), obs=Y)
         # 全ての軸をevent_shapeにしても計算はできる
         # obs = pyro.sample("Y", dist.Normal(mu, sigma).to_event(2), obs=Y)
         return mu
 
 
-def save_loss_graph(loss_list, loss_path):
+def save_loss_graph(loss_list: List[float], loss_path: str) -> None:
     plt.plot(np.array(loss_list))
     plt.xlabel("step")
     plt.ylabel("Loss")
@@ -68,7 +78,7 @@ def save_loss_graph(loss_list, loss_path):
     plt.clf()
 
 
-def predict(model, guide):
+def predict(model: Any, guide: Any) -> Tuple[NDArray[np.float32], NDArray[np.float32]]:
     # 近似分布からのサンプルを利用した予測分布
     predictive = Predictive(model, guide=guide, num_samples=500)
 
@@ -83,26 +93,48 @@ def predict(model, guide):
     return y_pred_mean, percentiles
 
 
-def save_predictions(y_pred_mean, percentiles, x_data, y_data, x_linspace, y_linspace, x_new, path):
-    _, ax = plt.subplots(figsize=(10, 5))
-    # データ可視化
-    ax.plot(x_data, y_data, "o", markersize=3, label="data")
-    # 真の関数
-    ax.plot(x_linspace, y_linspace, label="true_func")
-    # 予測分布の平均
-    ax.plot(x_new, y_pred_mean, label="mean")
-    # 予測分布の90パーセンタイル
-    ax.fill_between(x_new.squeeze(-1), percentiles[0, :], percentiles[1, :], alpha=0.5, label="90percentile", color="orange")
+def save_predictions(
+    pred_train_ys: torch.Tensor,
+    train_torch_ys: torch.Tensor,
+    pred_test_ys: torch.Tensor,
+    test_torch_ys: torch.Tensor,
+    path: str,
+):
+    pass
+    # _, ax = plt.subplots(figsize=(10, 5))
+    ## データ可視化
+    # ax.plot(x_data, y_data, "o", markersize=3, label="data")
+    ## 真の関数
+    # ax.plot(x_linspace, y_linspace, label="true_func")
+    ## 予測分布の平均
+    # ax.plot(x_new, y_pred_mean, label="mean")
+    ## 予測分布の90パーセンタイル
+    # ax.fill_between(
+    #    x_new.squeeze(-1),
+    #    percentiles[0, :],
+    #    percentiles[1, :],
+    #    alpha=0.5,
+    #    label="90percentile",
+    #    color="orange",
+    # )
 
-    ax.set_xlabel(r"$x$")
-    ax.set_ylabel(r"$x$")
-    ax.set_ylabel(r"$y$")
-    ax.set_ylim(-20, 20)
-    ax.legend()
-    plt.savefig(path)
+    # ax.set_xlabel(r"$x$")
+    # ax.set_ylabel(r"$x$")
+    # ax.set_ylabel(r"$y$")
+    # ax.set_ylim(-20, 20)
+    # ax.legend()
+    # plt.savefig(path)
 
 
-def execute(xs, ys, x_linspace, y_linspace, new_xs, loss_path, model_path):
+def execute(
+    train_xs: NDArray[np.float32],
+    train_ys: NDArray[np.float32],
+    test_xs: NDArray[np.float32],
+    test_ys: NDArray[np.float32],
+    loss_path: str,
+    pred_path: str,
+    model_path: str,
+) -> None:
     model = Model()
     # パラメータをリセット
     pyro.clear_param_store()
@@ -114,17 +146,17 @@ def execute(xs, ys, x_linspace, y_linspace, new_xs, loss_path, model_path):
     svi = SVI(model, guide, adam, loss=Trace_ELBO())
 
     # データをtensorに変換
-    x_data = torch.from_numpy(xs).float().unsqueeze(-1)
-    y_data = torch.from_numpy(ys).float().unsqueeze(-1)
+    train_torch_xs = torch.from_numpy(train_xs)
+    train_torch_ys = torch.from_numpy(train_ys).unsqueeze(-1)
 
     # 最適化
     torch.manual_seed(0)
     n_epoch = 10000
     loss_list = []
-    for epoch in range(n_epoch):
+    for _ in range(n_epoch):
 
         # 変分推論の最適化ステップ
-        loss = svi.step(x_data, y_data, H1, H2)
+        loss = svi.step(train_torch_xs, train_torch_ys, H1, H2)
         loss_list.append(loss)
 
     # 損失関数の可視化
@@ -132,5 +164,14 @@ def execute(xs, ys, x_linspace, y_linspace, new_xs, loss_path, model_path):
 
     y_pred_mean, percentiles = predict(model, guide)
 
-    x_new = torch.from_numpy(new_xs).float().unsqueeze(-1)
-    save_predictions(y_pred_mean, percentiles, x_data, y_data, x_linspace, y_linspace, x_new, model_path)
+    test_torch_ys = torch.from_numpy(test_xs)
+    # save_predictions(
+    #    y_pred_mean,
+    #    percentiles,
+    #    x_data,
+    #    y_data,
+    #    x_linspace,
+    #    y_linspace,
+    #    x_new,
+    #    model_path,
+    # )
