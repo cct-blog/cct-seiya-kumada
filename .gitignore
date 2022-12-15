@@ -73,3 +73,14 @@ gaussian_process/loss_pytorch.jpg
 gaussian_process/src/__pycache__/main_base.cpython-39.pyc
 gaussian_process/heatmap_house.jpg
 gaussian_process/base.jpg
+*.jpg
+*.npy
+*.pyc
+generics_partial_specialization_in_rust/cpp/x64/*
+generics_partial_specialization_in_rust/cpp/generics_partial_specialization_in_rust/generics_partial_specialization_in_rust.vcxproj.user
+generics_partial_specialization_in_rust/cpp/generics_partial_specialization_in_rust/x64/*
+generics_partial_specialization_in_rust/rust/generics_partial_specialization/target/*
+farthest_point_sampling/FarthestPointSampling/FarthestPointSampling/FarthestPointSampling.vcxproj.user
+farthest_point_sampling/FarthestPointSampling/FarthestPointSampling/x64/
+farthest_point_sampling/FarthestPointSampling/x64/
+earth_movers_distance/hoge/

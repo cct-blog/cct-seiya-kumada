@@ -25,10 +25,10 @@ if __name__ == "__main__":
     dir_path = os.path.join("outputs", head)
     if not os.path.isdir(dir_path):
         os.makedirs(dir_path)
-    for iter in range(0, 100, 5):
+    for iter in range(0, 100, 1):
         print(f"iter: {iter}")
         cv = seg.chan_vese(
-            image, mu=0.2, lambda1=1, lambda2=1, tol=1e-3, max_iter=iter, dt=0.5, init_level_set=init, extended_output=True,
+            image, mu=0.25, lambda1=1, lambda2=1, tol=1e-3, max_iter=iter, dt=0.5, init_level_set=init, extended_output=True,
         )
 
         dst = cv[0]
