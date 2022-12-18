@@ -11,16 +11,15 @@ namespace fs = std::filesystem;
 
 auto execute_farthest_point_sampling(const std::vector<cv::Vec3f>& cloud, int k) -> std::vector<cv::Vec3f>;
 auto convert_to_vec(const pcl::PointCloud<pcl::PointXYZ>::Ptr pc) -> std::vector<cv::Vec3f>;
-auto calcualte_distances(const cv::Vec3f& p, const std::vector<cv::Vec3f>& cloud) -> cv::Mat;
-auto argmax(const std::vector<float>& vs) -> int;
-auto argmax(cv::MatIterator_<float> beg, cv::MatIterator_<float> end) -> int;
-auto minimum(const cv::Mat& a, const cv::Mat& b) -> cv::Mat;
+auto convert_to_pcd(const std::vector<cv::Vec3f>& ps) -> pcl::PointCloud<pcl::PointXYZ>::Ptr;
+
 
 int main(int argc, const char* argv[]) {
 	// ファイルの有無を確認
 	auto file_path = fs::path{ "c:/data/3dpcp_book_codes/3rdparty/Open3D/examples/test_data/fragment.pcd" };
-	if (fs::exists(file_path)) {
-		std::cout << "> The file exists!\n";
+	if (!fs::exists(file_path)) {
+		std::cout << "> The file does not exist!\n";
+		return 0;
 	}
 
 	// ファイルから点群を読み込む。
@@ -30,37 +29,57 @@ int main(int argc, const char* argv[]) {
 		std::cout << "> Loading is successful!" << std::endl;
 		std::cout << "> Cloud size is " << cloud->size() << std::endl;
 	}
+	else {
+		std::cout << "> Loading is failed" << std::endl;
+		return 0;
+	}
 
 	// std::vector<cv::Vec3f>に変換
 	auto vs = convert_to_vec(cloud);
 	
 	// FPSを実行
 	const auto k = 1000;
-	auto results = execute_farthest_point_sampling(vs, k); 
+	auto results = execute_farthest_point_sampling(vs, k); // vector<cv::Vec3f>
+	auto sampled_cloud = convert_to_pcd(results);
+	std::cout << "> Sampled points size is " << sampled_cloud->size() << std::endl;
 	return 1;
 }
 
+auto generate_random_value(int seed, int size) -> int {
+	auto rnd = std::random_device{};
+	auto mt = std::mt19937{ rnd()};
+	auto dist = std::uniform_int_distribution<>{ 0, size };
+	mt.seed(1);
+	auto index = dist(mt);
+	return index;
+}
+
+auto calcualte_distances(const cv::Vec3f& p, const std::vector<cv::Vec3f>& cloud) -> cv::Mat;
+auto argmax(const std::vector<float>& vs) -> int;
+auto argmax(cv::MatIterator_<float> beg, cv::MatIterator_<float> end) -> int;
+auto minimum(const cv::Mat& a, const cv::Mat& b) -> cv::Mat;
+
 auto execute_farthest_point_sampling(const std::vector<cv::Vec3f>& cloud, int k) -> std::vector<cv::Vec3f> {
+	// 抽出された点のインデックスを格納する配列
 	auto indices = std::vector<int>(k, 0);
+	
 	const auto cloud_size = std::size(cloud);
+
+	// 抽出した点と各点との距離を格納する行列
 	auto distances = cv::Mat(k, cloud_size, CV_32F, 0.0);
 
 	// 乱数を生成し、最初の点を決める。
-	auto dist = std::uniform_int_distribution<>{ 0, static_cast<int>(cloud_size) };
-	auto rd = std::random_device{};
-	auto index = dist(rd);
-	auto farthest_point = cloud[index];
+	auto index = generate_random_value(1, cloud_size);
+	cv::Vec3f farthest_point = cloud[index];
 
 	// 点の登録
 	indices[0] = index;
 
 	// 他の点との距離を計算
 	auto min_distances = calcualte_distances(farthest_point, cloud);
-	std::cout << distances.rows << " " << distances.cols << std::endl;
-	std::cout << min_distances.rows << " " << distances.cols << std::endl;
 
 	// distancesの0行目に代入する。
-	distances(cv::Rect(0, 0, cloud_size, 1)) = min_distances;
+	distances(cv::Rect(0/* 列 */, 0/* 行 */, cloud_size/* 幅 */, 1/* 高さ */)) = min_distances;
 
 	for (auto i = 1; i < k; ++i) {
 		indices[i] = argmax(min_distances.begin<float>(), min_distances.end<float>());
@@ -88,10 +107,17 @@ auto convert_to_vec(const pcl::PointCloud<pcl::PointXYZ>::Ptr pc) -> std::vector
 	return vs;
 }
 
+auto convert_to_pcd(const std::vector<cv::Vec3f>& ps) -> pcl::PointCloud<pcl::PointXYZ>::Ptr {
+	auto cloud = std::make_shared<pcl::PointCloud<pcl::PointXYZ>>();
+	cloud->reserve(std::size(ps));
+	for (const auto& p : ps) {
+		cloud->emplace_back(p[0], p[1], p[2]);
+	}
+	return cloud;
+}
+
 auto calcualte_distances(const cv::Vec3f& p, const std::vector<cv::Vec3f>& cloud) -> cv::Mat {
 	auto ms = cv::Mat(1, std::size(cloud), CV_32F, 0.0);
-	ms.begin<float>();
-	ms.end<float>();
 	for (auto i = 0; i < std::size(cloud); ++i) {
 		const auto a = p - cloud[i];
 		ms.at<float>(0, i) = cv::norm(a);
