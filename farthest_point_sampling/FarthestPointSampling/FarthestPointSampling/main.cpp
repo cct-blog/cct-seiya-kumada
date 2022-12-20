@@ -35,13 +35,18 @@ int main(int argc, const char* argv[]) {
 	}
 
 	// std::vector<cv::Vec3f>に変換
-	auto vs = convert_to_vec(cloud);
+	const auto vs = convert_to_vec(cloud);
 	
 	// FPSを実行
 	const auto k = 1000;
-	auto results = execute_farthest_point_sampling(vs, k); // vector<cv::Vec3f>
+	auto results = execute_farthest_point_sampling(vs, k);
 	auto sampled_cloud = convert_to_pcd(results);
 	std::cout << "> Sampled points size is " << sampled_cloud->size() << std::endl;
+
+	// 保存する。
+	const std::string output_path = "C:/projects/cct-seiya-kumada/farthest_point_sampling/FarthestPointSampling/sampled.pcd";
+	std::cout << sampled_cloud->size() << std::endl;
+	pcl::io::savePCDFileBinary(output_path, *sampled_cloud);
 	return 1;
 }
 
@@ -69,23 +74,29 @@ auto execute_farthest_point_sampling(const std::vector<cv::Vec3f>& cloud, int k)
 	auto distances = cv::Mat(k, cloud_size, CV_32F, 0.0);
 
 	// 乱数を生成し、最初の点を決める。
-	auto index = generate_random_value(1, cloud_size);
+	const auto index = generate_random_value(1, cloud_size);
 	cv::Vec3f farthest_point = cloud[index];
 
 	// 点の登録
 	indices[0] = index;
 
 	// 他の点との距離を計算
-	auto min_distances = calcualte_distances(farthest_point, cloud);
+	auto min_distances = calcualte_distances(farthest_point, cloud); // (1,cloud_size)
 
 	// distancesの0行目に代入する。
-	distances(cv::Rect(0/* 列 */, 0/* 行 */, cloud_size/* 幅 */, 1/* 高さ */)) = min_distances;
+	min_distances.row(0).copyTo(distances.row(0));
 
 	for (auto i = 1; i < k; ++i) {
 		indices[i] = argmax(min_distances.begin<float>(), min_distances.end<float>());
 		farthest_point = cloud[indices[i]];
-		distances(cv::Rect(0, i, cloud_size, 1)) = calcualte_distances(farthest_point, cloud);
-		min_distances = minimum(min_distances, distances(cv::Rect(0, i, cloud_size, 1)));
+
+		const auto tmp = calcualte_distances(farthest_point, cloud);	
+		
+		// distancesのi行目に代入する。
+		tmp.row(0).copyTo(distances.row(i));
+	
+		// min_distancesの更新
+		min_distances = minimum(min_distances, distances.row(i));
 	}
 
 	std::vector<cv::Vec3f> new_cloud{};

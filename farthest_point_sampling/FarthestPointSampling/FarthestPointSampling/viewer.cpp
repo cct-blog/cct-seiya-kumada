@@ -1,5 +1,5 @@
 #include "viewer.h"
-//#include <pcl/>
+
 auto view_point_cloud(pcl::PointCloud<pcl::PointXYZ>::Ptr cloud) -> void {
     //pcl::PointCloud<pcl::PointXYZRGBA>::Ptr cloud(new pcl::PointCloud<pcl::PointXYZRGBA>);
     //pcl::io::loadPCDFile("pcd_data.pcd", *cloud);
