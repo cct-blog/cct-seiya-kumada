@@ -12,11 +12,15 @@ namespace fs = std::filesystem;
 auto execute_farthest_point_sampling(const std::vector<cv::Vec3f>& cloud, int k) -> std::vector<cv::Vec3f>;
 auto convert_to_vec(const pcl::PointCloud<pcl::PointXYZ>::Ptr pc) -> std::vector<cv::Vec3f>;
 auto convert_to_pcd(const std::vector<cv::Vec3f>& ps) -> pcl::PointCloud<pcl::PointXYZ>::Ptr;
+auto select_points_with_random(const std::vector<cv::Vec3f>& cloud, int k) -> std::vector<cv::Vec3f>;
 
+const std::string INPUT_PATH = "c:/data/3dpcp_book_codes/3rdparty/Open3D/examples/test_data/fragment.pcd";
+const std::string OUTPUT_PATH_1 = "C:/projects/cct-seiya-kumada/farthest_point_sampling/FarthestPointSampling/sampled.pcd";
+const std::string OUTPUT_PATH_2 = "C:/projects/cct-seiya-kumada/farthest_point_sampling/FarthestPointSampling/random_sampled.pcd";
 
 int main(int argc, const char* argv[]) {
 	// ファイルの有無を確認
-	auto file_path = fs::path{ "c:/data/3dpcp_book_codes/3rdparty/Open3D/examples/test_data/fragment.pcd" };
+	auto file_path = fs::path{ INPUT_PATH };
 	if (!fs::exists(file_path)) {
 		std::cout << "> The file does not exist!\n";
 		return 0;
@@ -44,10 +48,30 @@ int main(int argc, const char* argv[]) {
 	std::cout << "> Sampled points size is " << sampled_cloud->size() << std::endl;
 
 	// 保存する。
-	const std::string output_path = "C:/projects/cct-seiya-kumada/farthest_point_sampling/FarthestPointSampling/sampled.pcd";
 	std::cout << sampled_cloud->size() << std::endl;
-	pcl::io::savePCDFileBinary(output_path, *sampled_cloud);
+	pcl::io::savePCDFileBinary(OUTPUT_PATH_1, *sampled_cloud);
+
+	// 乱数で点を選択する。
+	auto random_results = select_points_with_random(vs, k);
+	auto random_cloud = convert_to_pcd(random_results);
+	pcl::io::savePCDFileBinary(OUTPUT_PATH_2, *random_cloud);
+
 	return 1;
+}
+
+auto select_points_with_random(const std::vector<cv::Vec3f>& cloud, int k) -> std::vector<cv::Vec3f> {
+	auto rnd = std::random_device{};
+	auto mt = std::mt19937{ rnd()};
+	auto dist = std::uniform_int_distribution<>{ 0, static_cast<int>(std::size(cloud)) };
+	mt.seed(1);
+
+	auto results = std::vector<cv::Vec3f>{};
+	results.reserve(k);
+	for (auto i = 0; i < k; ++i) {
+		auto index = dist(mt);
+		results.emplace_back(cloud[index]);
+	}
+	return results;
 }
 
 auto generate_random_value(int seed, int size) -> int {

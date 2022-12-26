@@ -85,3 +85,4 @@ farthest_point_sampling/FarthestPointSampling/FarthestPointSampling/x64/
 farthest_point_sampling/FarthestPointSampling/x64/
 earth_movers_distance/hoge/
 farthest_point_sampling/FarthestPointSampling/sampled.pcd
+farthest_point_sampling/FarthestPointSampling/random_sampled.pcd
