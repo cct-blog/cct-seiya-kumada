@@ -89,13 +89,11 @@ auto argmax(cv::MatIterator_<float> beg, cv::MatIterator_<float> end) -> int;
 auto minimum(const cv::Mat& a, const cv::Mat& b) -> cv::Mat;
 
 auto execute_farthest_point_sampling(const std::vector<cv::Vec3f>& cloud, int k) -> std::vector<cv::Vec3f> {
-	// 抽出された点のインデックスを格納する配列
+	// 選択された点のインデックスを格納する配列（k個の0で初期化）
 	auto indices = std::vector<int>(k, 0);
-	
-	const auto cloud_size = std::size(cloud);
 
-	// 抽出した点と各点との距離を格納する行列
-	auto distances = cv::Mat(k, cloud_size, CV_32F, 0.0);
+	// 入力点群の点数
+	const auto cloud_size = std::size(cloud);
 
 	// 乱数を生成し、最初の点を決める。
 	const auto index = generate_random_value(1, cloud_size);
@@ -107,20 +105,18 @@ auto execute_farthest_point_sampling(const std::vector<cv::Vec3f>& cloud, int k)
 	// 他の点との距離を計算
 	auto min_distances = calcualte_distances(farthest_point, cloud); // (1,cloud_size)
 
-	// distancesの0行目に代入する。
-	min_distances.row(0).copyTo(distances.row(0));
-
 	for (auto i = 1; i < k; ++i) {
+		// 最も距離の長い点のインデックスを見つけ、indicesに登録する。
 		indices[i] = argmax(min_distances.begin<float>(), min_distances.end<float>());
+
+		// 新たな最遠点
 		farthest_point = cloud[indices[i]];
 
+		// 他の点との距離を計算
 		const auto tmp = calcualte_distances(farthest_point, cloud);	
 		
-		// distancesのi行目に代入する。
-		tmp.row(0).copyTo(distances.row(i));
-	
 		// min_distancesの更新
-		min_distances = minimum(min_distances, distances.row(i));
+		min_distances = minimum(min_distances, tmp);
 	}
 
 	std::vector<cv::Vec3f> new_cloud{};
