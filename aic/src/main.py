@@ -110,41 +110,67 @@ def draw_aic_and_bic(
     plt.plot(degrees, bics, label="BIC", color="blue")
     plt.scatter(degrees, bics, color="blue")
     plt.xlabel("Degree")
+    plt.xticks(degrees)
     plt.ylabel("AIC/BIC")
     plt.legend(loc="best")
     plt.savefig("./images/aic_bic.jpg")
     plt.clf()
 
 
-if __name__ == "__main__":
-    # 観測データを作る。
-    N = 20
-    xs, ys, random_xs, random_ys = make_dataset(n=N, scale=0.4)
-    draw_figure(xs, ys, random_xs, random_ys)
-
+def make_aic_and_bic(
+    random_xs: NDArray[np.float64],
+    random_ys: NDArray[np.float64],
+    N: int,
+) -> None:
     aics = []
     bics = []
     degrees = list(range(2, 20))
     for degree in degrees:
         # 多項式で回帰する。
-        # degree = 10
         model, polynomial_features = execute_regression(
             random_xs, random_ys, degree
         )
 
-        # 予測する。
-        # pred_ys = predict(model, polynomial_features, xs)
-
-        # 可視化する。
-        # draw_figure_with_prediction(xs, ys, random_xs, random_ys, pred_ys)
-
         # 評価する。
         mse = calculate_mse(random_xs, random_ys, model, polynomial_features)
-        # print(f"> Degree: {degree}, RMSE: {mse}")
 
         (aic, bic) = calculate_aic_and_bic(mse, degree, N)
         aics.append(aic)
         bics.append(bic)
-        # print(f"> AIC: {aic}, BIC: {bic}")
 
     draw_aic_and_bic(degrees, aics, bics)
+
+
+def execute_polynomial_regression(
+    degree: int,
+    xs: NDArray[np.float64],
+    ys: NDArray[np.float64],
+    random_xs: NDArray[np.float64],
+    random_ys: NDArray[np.float64],
+) -> None:
+    model, polynomial_features = execute_regression(
+        random_xs, random_ys, degree
+    )
+
+    # 予測する。
+    pred_ys = predict(model, polynomial_features, xs)
+
+    # 可視化する。
+    draw_figure_with_prediction(xs, ys, random_xs, random_ys, pred_ys)
+
+    # 評価する。
+    mse = calculate_mse(random_xs, random_ys, model, polynomial_features)
+    print(f"> Degree: {degree}, MSE: {mse}")
+
+
+if __name__ == "__main__":
+    # 観測データを作る。
+    N = 30
+    xs, ys, random_xs, random_ys = make_dataset(n=N, scale=0.4)
+    draw_figure(xs, ys, random_xs, random_ys)
+
+    # AIC,BICを計算する。
+    make_aic_and_bic(random_xs, random_ys, N)
+
+    degree = 4
+    execute_polynomial_regression(degree, xs, ys, random_xs, random_ys)
