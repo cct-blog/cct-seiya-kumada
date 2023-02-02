@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from numpy.typing import NDArray
 from sklearn.linear_model import LinearRegression
-from sklearn.metrics import mean_squared_error, r2_score
+from sklearn.metrics import mean_squared_error
 from sklearn.preprocessing import PolynomialFeatures
 
 np.random.seed(1)
@@ -171,8 +171,8 @@ if __name__ == "__main__":
     draw_figure(xs, ys, random_xs, random_ys)
 
     # AIC,BICを計算する。
-    MAX_DEGREE = 10
-    make_aic_and_bic(random_xs, random_ys, DATA_SIZE, MAX_DEGREE)
+    # MAX_DEGREE = 10
+    # make_aic_and_bic(random_xs, random_ys, DATA_SIZE, MAX_DEGREE)
 
     degree = 4
     execute_polynomial_regression(degree, xs, ys, random_xs, random_ys)
