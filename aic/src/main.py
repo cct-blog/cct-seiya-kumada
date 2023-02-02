@@ -98,7 +98,7 @@ def calculate_mse(
 def calculate_aic_and_bic(
     mse: np.float64, degree: int, data_num: int
 ) -> Tuple[np.float64, np.float64]:
-    a = data_num * np.log(mse)
+    a = data_num * mse
     return (a + 2 * degree, a + degree * np.log(data_num))
 
 
@@ -121,10 +121,11 @@ def make_aic_and_bic(
     random_xs: NDArray[np.float64],
     random_ys: NDArray[np.float64],
     N: int,
+    max_degree: int,
 ) -> None:
     aics = []
     bics = []
-    degrees = list(range(2, 20))
+    degrees = list(range(2, max_degree))
     for degree in degrees:
         # 多項式で回帰する。
         model, polynomial_features = execute_regression(
@@ -165,12 +166,13 @@ def execute_polynomial_regression(
 
 if __name__ == "__main__":
     # 観測データを作る。
-    N = 30
-    xs, ys, random_xs, random_ys = make_dataset(n=N, scale=0.4)
+    DATA_SIZE = 20
+    xs, ys, random_xs, random_ys = make_dataset(n=DATA_SIZE, scale=0.4)
     draw_figure(xs, ys, random_xs, random_ys)
 
     # AIC,BICを計算する。
-    make_aic_and_bic(random_xs, random_ys, N)
+    MAX_DEGREE = 10
+    make_aic_and_bic(random_xs, random_ys, DATA_SIZE, MAX_DEGREE)
 
     degree = 4
     execute_polynomial_regression(degree, xs, ys, random_xs, random_ys)
