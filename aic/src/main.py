@@ -10,15 +10,15 @@ from sklearn.preprocessing import PolynomialFeatures
 np.random.seed(1)
 
 
-def polynomial(xs: NDArray[np.float64]) -> NDArray[np.float64]:
+def calculate_ground_truth(xs: NDArray[np.float64]) -> NDArray[np.float64]:
     return 2.0 * xs - np.sin(3.0 * np.pi * xs)  # type:ignore
 
 
 def make_dataset(n: int, scale: float) -> List[NDArray[np.float64]]:
     xs = np.linspace(start=0, stop=1, num=50)
-    ys = polynomial(xs)
+    ys = calculate_ground_truth(xs)
     random_xs = np.random.rand(n)
-    random_ys = polynomial(random_xs) + np.random.normal(
+    random_ys = calculate_ground_truth(random_xs) + np.random.normal(
         loc=0, scale=scale, size=n
     )
     return [xs, ys, random_xs, random_ys]
