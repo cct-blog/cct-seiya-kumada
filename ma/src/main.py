@@ -30,8 +30,8 @@ class Ma1Process:
 
 def draw_graph(xs: NDArray[np.float64], ys: List[float], filename: str) -> None:
     plt.plot(xs, ys)
-    plt.xlabel("x")
-    plt.ylim(-3, 3)
+    plt.xlabel("t")
+    plt.ylim(-5, 5)
     plt.ylabel("y")
     # plt.legend(loc="best")
     plt.savefig(f"./images/{filename}")
@@ -42,9 +42,9 @@ if __name__ == "__main__":
     xs = np.linspace(start=0, stop=100, num=100)
 
     mu = 0.0
-    theta = 0.8
+    theta = -0.1
     sigma = 1.0
     ma1_process = Ma1Process(mu=mu, theta=theta, sigma=sigma)
     ys = [ma1_process(x) for x in xs]
     # print(type(xs), type(ys))
-    draw_graph(xs, ys, f"ma1_{mu}_{theta}_{sigma}.jpg")
+    draw_graph(xs, ys, f"ma1_mu_{mu}_theta_{theta}_sigma_{sigma}.jpg")
