@@ -42,7 +42,7 @@ if __name__ == "__main__":
     xs = np.linspace(start=0, stop=100, num=100)
 
     mu = 0.0
-    theta = -0.1
+    theta = -2.0
     sigma = 1.0
     ma1_process = Ma1Process(mu=mu, theta=theta, sigma=sigma)
     ys = [ma1_process(x) for x in xs]
