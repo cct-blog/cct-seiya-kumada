@@ -1,12 +1,14 @@
 import itertools
+from typing import Any
 
 import matplotlib.pyplot as plt
+import numpy as np
 import pandas as pd
 import statsmodels.api as sm
-from statsmodels.tsa.statespace.sarimax import SARIMAX
+from statsmodels.tsa.statespace.sarimax import SARIMAX, SARIMAXResultsWrapper
 
 
-def load_data(path, publisher_name):
+def load_data(path: str, publisher_name: str) -> pd.DataFrame:
     # read only columns = ['Publisher', 'Year', 'Global_Sales']
     df = pd.read_csv(path, usecols=["Publisher", "Year", "Global_Sales"])
     df = df.dropna(how="any")
@@ -21,8 +23,9 @@ def load_data(path, publisher_name):
     return df
 
 
-def draw_plot(df, title, path):
+def draw_plot(df: pd.DataFrame, title: str, path: str) -> None:
     # plot Year vs JP_Sales
+    plt.figure(figsize=(24, 4))
     plt.plot(df.index.get_level_values("Year"), df["Global_Sales"])
     plt.title(title)
     plt.xlabel("Year")
@@ -31,27 +34,27 @@ def draw_plot(df, title, path):
     plt.clf()
 
 
-def calculate_kpss(ts):
+def calculate_kpss(ts: pd.DataFrame) -> np.float64:
     # KPSS検定
     _, p_value, _, _ = sm.tsa.kpss(ts, nlags=1)
-    return p_value
+    return p_value  # type:ignore
 
 
-def calculate_diff(ts, periods):
+def calculate_diff(ts: pd.DataFrame, periods: int) -> pd.DataFrame:
     diff_1 = ts.diff(periods=periods)
     # １地点目がNaN(0地点はないため)になるため、dropna()
     diff_1 = diff_1.dropna()
     return diff_1
 
 
-def evaluate_kpss(df):
+def evaluate_kpss(df: pd.DataFrame) -> tuple[np.float64, np.float64]:
     kpss_0 = calculate_kpss(df["Global_Sales"])
     df_diff_1 = calculate_diff(df, 1)
     kpss_1 = calculate_kpss(df_diff_1["Global_Sales"])
     return kpss_0, kpss_1
 
 
-def calculate_auto_correlation(lags, ticks, ts, path, title):
+def calculate_auto_correlation(lags: int, ticks: int, ts: pd.Series, path: str, title: str) -> None:
     fig = plt.figure(figsize=(12, 8))
     ax1 = fig.add_subplot(111)
     # add ticks to the plot
@@ -62,7 +65,13 @@ def calculate_auto_correlation(lags, ticks, ts, path, title):
     plt.savefig(path)
 
 
-def execute_grid_search(ts_train, d, m):
+Tuple4Int = tuple[int, int, int, int]
+Tuple3Int = tuple[int, int, int]
+
+
+def execute_grid_search(
+    ts_train: pd.DataFrame, d: int, m: int
+) -> list[Tuple3Int, Tuple4Int, np.float64]:
     # SARIMA(p,d,q)(sp,sd,sq)[s]の次数の範囲を決める。
     # 範囲は計算量を減らすため、経験上、p,d,qを0～2、sp,sd,sqを0～1くらいに限定する。
     p = q = range(0, 3)
@@ -102,7 +111,9 @@ def execute_grid_search(ts_train, d, m):
     return best_result
 
 
-def read_params(path):
+def read_params(
+    path: str,
+) -> tuple[tuple[int, ...], tuple[int, ...]]:
     with open(path, "r") as f:
         lines = f.readlines()
         items = tuple([int(x) for x in lines[0].split(",")])
@@ -112,14 +123,16 @@ def read_params(path):
     return a, A
 
 
-def train(ts_train, a, A):
+def train(ts_train: pd.DataFrame, a: tuple[int, ...], A: tuple[int, ...]) -> SARIMAXResultsWrapper:
     (p, d, q) = a
     (P, D, Q, m) = A
     model = SARIMAX(endog=ts_train, order=(p, d, q), seasonal_order=(P, D, Q, m)).fit()
     return model
 
 
-def predict(arima_model, df_test):
+def predict(
+    arima_model: SARIMAXResultsWrapper, df_test: pd.DataFrame
+) -> tuple[pd.Series, pd.Series, pd.DataFrame]:
     # predict
     train_pred = arima_model.predict()
     test_pred = arima_model.forecast(len(df_test))
@@ -127,7 +140,14 @@ def predict(arima_model, df_test):
     return (train_pred, test_pred, test_pred_ci)
 
 
-def draw_results(df_train, df_test, train_pred, test_pred, test_pred_ci, path) -> None:
+def draw_results(
+    df_train: pd.DataFrame,
+    df_test: pd.DataFrame,
+    train_pred: pd.Series,
+    test_pred: pd.Series,
+    test_pred_ci: pd.DataFrame,
+    path: str,
+) -> None:
     # グラフ化
     plt.figure(figsize=(24, 4))
     # fig, ax = plt.subplots()
@@ -171,7 +191,9 @@ def draw_results(df_train, df_test, train_pred, test_pred, test_pred_ci, path) -
     plt.clf()
 
 
-def draw_results_part(df_test, test_pred, test_pred_ci, path):
+def draw_results_part(
+    df_test: pd.DataFrame, test_pred: pd.Series, test_pred_ci: pd.DataFrame, path: str
+) -> None:
     # グラフ化
     plt.figure(figsize=(24, 4))
     # fig, ax = plt.subplots()

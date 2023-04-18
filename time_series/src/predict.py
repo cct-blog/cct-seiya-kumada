@@ -7,7 +7,7 @@ from pmdarima import model_selection
 import src.utils as utils
 
 
-def print_args(args):
+def print_args(args: argparse.Namespace) -> None:
     print(f"> data_path: {args.data_path}")
     print(f"> model_path: {args.model_path}")
     print(f"> output_dir_path: {args.output_dir_path}")

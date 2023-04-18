@@ -1,10 +1,13 @@
 @echo off
 chcp 65001
 
+rem データのURL
+rem https://www.kaggle.com/datasets/gregorut/videogamesales
 set DATA_PATH="C:\\data\\time_series_data\\archive\\vgsales.csv"
 set OUTPUT_DIR_PATH="C:\\data\\time_series_data\\archive\\outputs"
 set TRAIN_RATE=0.8
 
+rem これをブログに書く
 set PUBLISHER="Nintendo"
 set LAGS=32
 set XTICKS=5
@@ -46,7 +49,7 @@ python -m src.optimize_model ^
     --publisher %PUBLISHER% ^
     --train_rate %TRAIN_RATE% ^
     --d %d%
-
+ 
 python -m src.train ^
     --data_path %DATA_PATH% ^
     --output_dir_path %OUTPUT_DIR_PATH% ^

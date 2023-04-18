@@ -27,8 +27,7 @@ if __name__ == "__main__":
     utils.draw_plot(df, args.publisher, output_path)
 
     # evaluate kpss
-    kpss_0, kpss_1 = utils.evaluate_kpss(df)
-
+    (kpss_0, kpss_1) = utils.evaluate_kpss(df)
     d = arima.ndiffs(df["Global_Sales"])
 
     # save kpss result
