@@ -53,6 +53,13 @@ def evaluate_kpss(df: pd.DataFrame) -> tuple[np.float64, np.float64]:
     return kpss_0, kpss_1
 
 
+def calculate_kpss_(df: pd.DataFrame) -> None:
+    kpss_stat, p_value, lags, crit = sm.tsa.kpss(df["Global_Sales"])
+    print(
+        f"KPSS Statistic: {kpss_stat}, p-value: {p_value}, Lags Used: {lags}, Critical Values: {crit}"
+    )
+
+
 def calculate_auto_correlation(lags: int, ticks: int, ts: pd.Series, path: str, title: str) -> None:
     fig = plt.figure(figsize=(12, 8))
     ax1 = fig.add_subplot(111)

@@ -43,23 +43,23 @@ python -m src.pre_analysis ^
     --lags %LAGS% ^
     --xticks %XTICKS%
 
-python -m src.optimize_model ^
-    --data_path %DATA_PATH% ^
-    --output_dir_path %OUTPUT_DIR_PATH% ^
-    --publisher %PUBLISHER% ^
-    --train_rate %TRAIN_RATE% ^
-    --d %d%
- 
-python -m src.train ^
-    --data_path %DATA_PATH% ^
-    --output_dir_path %OUTPUT_DIR_PATH% ^
-    --publisher %PUBLISHER% ^
-    --train_rate %TRAIN_RATE% ^
-    --params_path %OUTPUT_DIR_PATH%\\%PUBLISHER%\\%PARAMS_NAME%
-
-python -m src.predict ^
-    --data_path %DATA_PATH% ^
-    --model_path %OUTPUT_DIR_PATH%\\%PUBLISHER%\\%MODEL_NAME% ^
-    --output_dir_path %OUTPUT_DIR_PATH% ^
-    --publisher %PUBLISHER% ^
-    --train_rate %TRAIN_RATE%
+rem python -m src.optimize_model ^
+rem     --data_path %DATA_PATH% ^
+rem     --output_dir_path %OUTPUT_DIR_PATH% ^
+rem     --publisher %PUBLISHER% ^
+rem     --train_rate %TRAIN_RATE% ^
+rem     --d %d%
+rem  
+rem python -m src.train ^
+rem     --data_path %DATA_PATH% ^
+rem     --output_dir_path %OUTPUT_DIR_PATH% ^
+rem     --publisher %PUBLISHER% ^
+rem     --train_rate %TRAIN_RATE% ^
+rem     --params_path %OUTPUT_DIR_PATH%\\%PUBLISHER%\\%PARAMS_NAME%
+rem 
+rem python -m src.predict ^
+rem     --data_path %DATA_PATH% ^
+rem     --model_path %OUTPUT_DIR_PATH%\\%PUBLISHER%\\%MODEL_NAME% ^
+rem     --output_dir_path %OUTPUT_DIR_PATH% ^
+rem     --publisher %PUBLISHER% ^
+rem     --train_rate %TRAIN_RATE%
