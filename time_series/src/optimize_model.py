@@ -12,6 +12,7 @@ if __name__ == "__main__":
     parser.add_argument("--publisher", type=str, default="Nintendo")
     parser.add_argument("--train_rate", type=float, default=0.9)
     parser.add_argument("--d", type=int, default=1)
+    parser.add_argument("--m", type=int, default=0)
     args = parser.parse_args()
 
     # load data
@@ -23,7 +24,7 @@ if __name__ == "__main__":
     print(f"> test data size: {len(df_test)}")
 
     # optimize model
-    best_result = utils.execute_grid_search(df_train, args.d, 0)
+    best_result = utils.execute_grid_search(df_train, args.d, args.m)
     print(f"> best model(p,d,q),(P,D,Q,m),AIC: {best_result}")
 
     # make output directory

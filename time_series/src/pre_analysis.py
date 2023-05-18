@@ -38,10 +38,9 @@ if __name__ == "__main__":
         f.write(f"ndiffs: {d}\n")
 
     # calculate auto correlation
+    # We find "m" from the plot of auto correlation.
     output_path = os.path.join(output_sub_dir_path, f"{args.publisher}_auto_corr.jpg")
-    utils.calculate_auto_correlation(
-        args.lags, args.xticks, df["Global_Sales"], output_path, args.publisher
-    )
+    utils.calculate_auto_correlation(args.lags, args.xticks, df["Global_Sales"], output_path, "lag")
 
     if kpss_0 > 0.05:
         print("The data is stationary.")

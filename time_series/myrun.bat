@@ -11,7 +11,10 @@ rem これをブログに書く
 set PUBLISHER="Nintendo"
 set LAGS=32
 set XTICKS=5
+rem we find "d" by pre_analysis.py, then write the value of "d" to the following line.
 set d=0
+rem we find "m" by pre_analysis.py, then write the value of "m" to the following line.
+set m=0 
 set PARAMS_NAME="Nintendo_best_params.txt"
 set MODEL_NAME="Nintendo_model.pkl"
 
@@ -43,23 +46,24 @@ python -m src.pre_analysis ^
     --lags %LAGS% ^
     --xticks %XTICKS%
 
-rem python -m src.optimize_model ^
-rem     --data_path %DATA_PATH% ^
-rem     --output_dir_path %OUTPUT_DIR_PATH% ^
-rem     --publisher %PUBLISHER% ^
-rem     --train_rate %TRAIN_RATE% ^
-rem     --d %d%
-rem  
-rem python -m src.train ^
-rem     --data_path %DATA_PATH% ^
-rem     --output_dir_path %OUTPUT_DIR_PATH% ^
-rem     --publisher %PUBLISHER% ^
-rem     --train_rate %TRAIN_RATE% ^
-rem     --params_path %OUTPUT_DIR_PATH%\\%PUBLISHER%\\%PARAMS_NAME%
-rem 
-rem python -m src.predict ^
-rem     --data_path %DATA_PATH% ^
-rem     --model_path %OUTPUT_DIR_PATH%\\%PUBLISHER%\\%MODEL_NAME% ^
-rem     --output_dir_path %OUTPUT_DIR_PATH% ^
-rem     --publisher %PUBLISHER% ^
-rem     --train_rate %TRAIN_RATE%
+python -m src.optimize_model ^
+    --data_path %DATA_PATH% ^
+    --output_dir_path %OUTPUT_DIR_PATH% ^
+    --publisher %PUBLISHER% ^
+    --train_rate %TRAIN_RATE% ^
+    --d %d% ^
+    --m %m%
+ 
+python -m src.train ^
+    --data_path %DATA_PATH% ^
+    --output_dir_path %OUTPUT_DIR_PATH% ^
+    --publisher %PUBLISHER% ^
+    --train_rate %TRAIN_RATE% ^
+    --params_path %OUTPUT_DIR_PATH%\\%PUBLISHER%\\%PARAMS_NAME%
+
+python -m src.predict ^
+    --data_path %DATA_PATH% ^
+    --model_path %OUTPUT_DIR_PATH%\\%PUBLISHER%\\%MODEL_NAME% ^
+    --output_dir_path %OUTPUT_DIR_PATH% ^
+    --publisher %PUBLISHER% ^
+    --train_rate %TRAIN_RATE%
