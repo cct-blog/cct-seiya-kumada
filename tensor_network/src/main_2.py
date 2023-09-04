@@ -63,7 +63,7 @@ def make_network_with_tensor_network() -> tf.keras.Sequential:
     return model
 
 
-@dataclass
+@dataclass(frozen=True)
 class Dataset:
     X_train: NDArray[np.float64]
     y_train: NDArray[np.float64]
@@ -128,8 +128,8 @@ def make_network(model_type: ModelType) -> tf.keras.Sequential:
 if __name__ == "__main__":
     set_seed()
     print("_/_/_/ make dataset")
-    dataset = load_dataset()
-    modified_dataset = modify_dataset_format(dataset)
+    dataset: Final = load_dataset()
+    modified_dataset: Final = modify_dataset_format(dataset)
 
     print("_/_/_/ make model")
     model_type = ModelType.TENSOR_NETWORK
@@ -137,7 +137,7 @@ if __name__ == "__main__":
     model.compile(loss="categorical_crossentropy", optimizer="adam", metrics=["accuracy"])
 
     print("_/_/_/ train model")
-    epochs = 1
+    epochs = 25
     history = train(model, epochs, modified_dataset)
     print(type(history))
     model.summary()
