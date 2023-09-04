@@ -1,13 +1,12 @@
 import os
 import random
 from dataclasses import dataclass
-from typing import Any, Final
+from enum import Enum
+from typing import Final
 
 import matplotlib.pyplot as plt
 import numpy as np
 import tensorflow as tf
-
-# from keras.callbacks import ModelCheckpoint
 from keras.datasets import fashion_mnist
 from keras.layers.core import Activation, Dense, Dropout
 from keras.models import Sequential
@@ -90,9 +89,7 @@ def modify_dataset_format(dataset: Dataset) -> Dataset:
     return Dataset(X_train, y_train, X_test, y_test)
 
 
-def train(model: tf.keras.Sequential, epochs: int, dataset: Dataset) -> Any:
-    # checkpoint = ModelCheckpoint(filepath, monitor='val_acc', verbose=1, save_best_only=True, mode='max')
-
+def train(model: tf.keras.Sequential, epochs: int, dataset: Dataset) -> tf.keras.callbacks.History:
     return model.fit(
         dataset.X_train,
         dataset.y_train,
@@ -103,7 +100,7 @@ def train(model: tf.keras.Sequential, epochs: int, dataset: Dataset) -> Any:
     )
 
 
-def plot_history(history: Any, name: str) -> None:
+def plot_history(history: tf.keras.callbacks.History, name: str) -> None:
     plt.plot(range(1, 1 + len(history.history["accuracy"])), history.history["accuracy"])
     plt.plot(range(1, 1 + len(history.history["val_accuracy"])), history.history["val_accuracy"])
     plt.title("Model Accuracy vs Number of Epochs")
@@ -114,26 +111,36 @@ def plot_history(history: Any, name: str) -> None:
     plt.savefig(f"./images/accuracy_{name}.png")
 
 
+class ModelType(Enum):
+    NORMAL = "normal"
+    TENSOR_NETWORK = "tensor_network"
+
+
+def make_network(model_type: ModelType) -> tf.keras.Sequential:
+    if model_type == ModelType.NORMAL:
+        return make_normal_network()
+    elif model_type == ModelType.TENSOR_NETWORK:
+        return make_network_with_tensor_network()
+    else:
+        raise ValueError(f"Invalid model type: {model_type}")
+
+
 if __name__ == "__main__":
     set_seed()
     print("_/_/_/ make dataset")
     dataset = load_dataset()
     modified_dataset = modify_dataset_format(dataset)
 
-    NAME = "tensor_network"
-    MAKE_NETWORK = {
-        "normal": make_normal_network,
-        "tensor_network": make_network_with_tensor_network,
-    }
-
     print("_/_/_/ make model")
-    model = MAKE_NETWORK[NAME]()
+    model_type = ModelType.TENSOR_NETWORK
+    model = make_network(model_type)
     model.compile(loss="categorical_crossentropy", optimizer="adam", metrics=["accuracy"])
 
     print("_/_/_/ train model")
     epochs = 1
     history = train(model, epochs, modified_dataset)
+    print(type(history))
     model.summary()
 
-    # print("_/_/_/ plot history")
-    # plot_history(history, NAME)
+    print("_/_/_/ plot history")
+    plot_history(history, model_type.value)
