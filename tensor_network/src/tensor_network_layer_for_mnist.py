@@ -5,10 +5,11 @@ import tensornetwork as tn
 
 tn.set_default_backend("tensorflow")
 
-A: Final = 32
-B: Final = 28
-C: Final = 16
-D: Final = 2
+I: Final = 32
+J: Final = 28
+K: Final = 16
+L: Final = 2
+
 
 class TNLayer(tf.keras.layers.Layer):  # type:ignore
     def __init__(self) -> None:
@@ -16,12 +17,12 @@ class TNLayer(tf.keras.layers.Layer):  # type:ignore
         # Create the variables for the layer.
 
         self.a_var = tf.Variable(
-            tf.random.normal(shape=(A, B, D), stddev=1.0 / 32.0), name="a", trainable=True
+            tf.random.normal(shape=(I, J, L), stddev=1.0 / 32.0), name="a", trainable=True
         )
         self.b_var = tf.Variable(
-            tf.random.normal(shape=(C, B, D), stddev=1.0 / 32.0), name="b", trainable=True
+            tf.random.normal(shape=(K, J, L), stddev=1.0 / 32.0), name="b", trainable=True
         )
-        self.bias = tf.Variable(tf.zeros(shape=(A, C)), name="bias", trainable=True)
+        self.bias = tf.Variable(tf.zeros(shape=(I, K)), name="bias", trainable=True)
 
     def call(self, inputs: Any) -> Any:
         # Define the contraction.
@@ -31,7 +32,7 @@ class TNLayer(tf.keras.layers.Layer):  # type:ignore
             input_vec: Any, a_var: tf.Variable, b_var: tf.Variable, bias_var: tf.Variable
         ) -> tn.Tensor:
             # Reshape to a matrix instead of a vector.
-            input_vec = tf.reshape(input_vec, (B, B))
+            input_vec = tf.reshape(input_vec, (J, J))
 
             # Now we create the network.
             a = tn.Node(a_var)
@@ -63,4 +64,4 @@ class TNLayer(tf.keras.layers.Layer):  # type:ignore
         # function.
         # https://www.tensorflow.org/api_docs/python/tf/vectorized_map
         result = tf.vectorized_map(lambda vec: f(vec, self.a_var, self.b_var, self.bias), inputs)
-        return tf.nn.relu(tf.reshape(result, (-1, A * C)))  # バッチの数だけの1024ベクトルができる。
+        return tf.nn.relu(tf.reshape(result, (-1, I * K)))  # バッチの数だけの1024ベクトルができる。
