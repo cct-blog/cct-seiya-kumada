@@ -137,7 +137,7 @@ if __name__ == "__main__":
     model.compile(loss="categorical_crossentropy", optimizer="adam", metrics=["accuracy"])
 
     print("_/_/_/ train model")
-    epochs = 100
+    epochs = 25
     history = train(model, epochs, modified_dataset)
     print(type(history))
     model.summary()

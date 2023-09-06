@@ -124,10 +124,10 @@ if __name__ == "__main__":
     set_seed()
     print("_/_/_/ make dataset")
     training_X, training_Y = make_training_dataset()
-    np.save("./dataset/training_X.npy", training_X)
-    np.save("./dataset/training_Y.npy", training_Y)
+    # np.save("./dataset/training_X.npy", training_X)
+    # np.save("./dataset/training_Y.npy", training_Y)
 
-    NAME = "normal"
+    NAME = "tensor_network"
     MAKE_NETWORK = {
         "normal": make_normal_network,
         "tensor_network": make_network_with_tensor_network,
@@ -136,19 +136,20 @@ if __name__ == "__main__":
     print("_/_/_/ make model")
     model = MAKE_NETWORK[NAME]()
     model.compile(optimizer="adam", loss="mean_squared_error")
-    model.fit(training_X, training_Y, epochs=300, verbose=0)
+    model.summary()
+    # model.fit(training_X, training_Y, epochs=300, verbose=0)
 
-    print("_/_/_/ make test dataset")
-    grid_X, grid_Y = make_grid_dataset(training_X, training_Y)
+    # print("_/_/_/ make test dataset")
+    # grid_X, grid_Y = make_grid_dataset(training_X, training_Y)
 
-    print("_/_/_/ predict on grid")
-    Z = model.predict(np.c_[grid_X.ravel(), grid_Y.ravel()])
+    # print("_/_/_/ predict on grid")
+    # Z = model.predict(np.c_[grid_X.ravel(), grid_Y.ravel()])
 
-    print("_/_/_/ plot heatmap")
-    plot_result(grid_X, grid_Y, training_X, training_Y, Z, f"{NAME}.png")
+    # print("_/_/_/ plot heatmap")
+    # plot_result(grid_X, grid_Y, training_X, training_Y, Z, f"{NAME}.png")
 
-    print("_/_/_/ predict test dataset")
-    test_X, test_Y = make_test_dataset()
-    predicted_Y = model.predict(test_X)
-    accuracy = calculate_accuracy(predicted_Y, test_Y)
-    print(f"accuracy: {accuracy}")
+    # print("_/_/_/ predict test dataset")
+    # test_X, test_Y = make_test_dataset()
+    # predicted_Y = model.predict(test_X)
+    # accuracy = calculate_accuracy(predicted_Y, test_Y)
+    # print(f"accuracy: {accuracy}")

@@ -8,7 +8,7 @@ tn.set_default_backend("tensorflow")
 I: Final = 32
 J: Final = 28
 K: Final = 16
-L: Final = 2
+L: Final = 1
 
 
 class TNLayer(tf.keras.layers.Layer):  # type:ignore
