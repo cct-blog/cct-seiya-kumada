@@ -107,7 +107,8 @@ def plot_history(history: tf.keras.callbacks.History, name: str) -> None:
     plt.ylabel("Accuracy")
     plt.xlabel("Epoch Number")
     plt.legend(["train", "test"], loc="best")
-    # plt.xticks(np.arange(0, 28, 2))
+    plt.ylim(0.75, 1.0)
+    plt.hlines(0.9, 0, len(history.history["accuracy"]), linestyles="dashed", colors="red")
     plt.savefig(f"./images/accuracy_{name}.png")
 
 
@@ -137,10 +138,10 @@ if __name__ == "__main__":
     model.compile(loss="categorical_crossentropy", optimizer="adam", metrics=["accuracy"])
 
     print("_/_/_/ train model")
-    epochs = 25
+    epochs = 50
     history = train(model, epochs, modified_dataset)
-    print(type(history))
-    model.summary()
+    # print(type(history))
+    # model.summary()
 
     print("_/_/_/ plot history")
     plot_history(history, model_type.value)
