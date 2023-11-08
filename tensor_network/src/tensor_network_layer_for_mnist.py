@@ -69,4 +69,4 @@ class TNLayer(tf.keras.layers.Layer):  # type:ignore
         # function.
         # https://www.tensorflow.org/api_docs/python/tf/vectorized_map
         result = tf.vectorized_map(lambda vec: f(vec, self.a_var, self.c_var, self.bias), inputs)
-        return tf.nn.relu(tf.reshape(result, (-1, self.m * self.n)))  # バッチの数だけの1024ベクトルができる。
+        return tf.reshape(result, (-1, self.m * self.n))  # バッチの数だけの1024ベクトルができる。
