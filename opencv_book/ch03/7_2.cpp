@@ -49,7 +49,7 @@ void haarcascade() {
 
 void opencv_face_detector() {
 	// パスの有無を確認する。
-	const auto FILE_PATH = std::string{"c:/data/opencv_book/sample_00.jpg"};
+	const auto FILE_PATH = std::string{"c:/data/opencv_book/physics_color.jpg"};
 	if (!fs::exists(FILE_PATH)) {
 		std::cout << "invalid file path\n";
 		return;
@@ -74,7 +74,7 @@ void opencv_face_detector() {
 	model.setPreferableTarget(cv::dnn::DNN_TARGET_CPU);
 
 	const auto scale = 1.0; // スケールファクター
-	const auto size = cv::Size(300, 300); // 入力サイズ
+	const auto size = cv::Size(1600, 806); // 入力サイズ
 	const auto mean = cv::Scalar(104.0, 177.0, 123.0); // 差し引かれる平均値
 	const auto swap = false; // BGR, true -> RGB
 	const auto crop = false;
@@ -108,5 +108,8 @@ void opencv_face_detector() {
 	}
 	std::cout << std::endl;
 	cv::imshow("face detection", image);
+	auto output_path = "C:\\data\\opencv_book\\face_detetion_result.jpg";
+	cv::imwrite(output_path, image);
 	cv::waitKey(0);
+	
 }
