@@ -89,4 +89,7 @@ farthest_point_sampling/FarthestPointSampling/random_sampled.pcd
 time_series/images/*
 tensor_network/images/*
 tensor_network/.mypy_cache/*
+opencv_book/x64/*
+opencv_book/ch03/*.user
+opencv_book/ch03/x64/*
 
