@@ -28,15 +28,15 @@ void TextRecognizer::init_model(const std::string& model_path, const std::string
 	model_->setPreferableTarget(cv::dnn::DNN_TARGET_CPU);
 
 	// モデルの入力パラメーターを設定する
-	const auto scale = 1.0 / 127.5;											// スケールファクター
-	const auto size = cv::Size{ 100, 32 };									// 入力サイズ（ICDAR2015）
-	const auto mean = cv::Scalar{ 127.5, 127.5, 127.5 }; // 差し引かれる平均値
-	const auto swap = true;													// チャンネルの順番（True: RGB、False: BGR）
-	const auto crop = false;													// クロップ
+	const auto scale = 1.0 / 127.5;							// スケールファクター
+	const auto size = cv::Size{ 100, 32 };					// 入力サイズ（ICDAR2015）
+	const auto mean = cv::Scalar{ 127.5, 127.5, 127.5 };	// 差し引かれる平均値
+	const auto swap = true;									// チャンネルの順番（True: RGB、False: BGR）
+	const auto crop = false;								// クロップ
 	model_->setInputParams(scale, size, mean, swap, crop);
 
 	// デコードタイプを設定する
-	auto type = std::string{ "CTC-greedy" };            // 貪欲法
+	auto type = std::string{ "CTC-greedy" };				// 貪欲法
 	model_->setDecodeType(type);
 
 	// 語彙リストを設定する

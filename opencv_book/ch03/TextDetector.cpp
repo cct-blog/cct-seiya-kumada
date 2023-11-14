@@ -5,6 +5,7 @@ TextDetector::TextDetector(const std::string& model_path)
 	: model_{ nullptr } {
 	init_model(model_path);
 }
+
 void TextDetector::init_model(const std::string& model_path) {
 	// モデルを読み込む。
 	model_ = std::make_unique<cv::dnn::TextDetectionModel_DB>(model_path);
@@ -14,10 +15,10 @@ void TextDetector::init_model(const std::string& model_path) {
 	model_->setPreferableTarget(cv::dnn::DNN_TARGET_CPU);
 
 	// モデルの入力パラメーターを設定する
-	const auto scale = 1.0 / 255.0;											// スケールファクター
+	const auto scale = 1.0 / 255.0;												// スケールファクター
 	//const auto size = cv::Size{ 736, 736 };									// 入力サイズ（MSRA - TD500）
 	const auto size = cv::Size{ 736, 1280 };									// 入力サイズ（ICDAR2015）
-	const auto mean = cv::Scalar{ 122.67891434, 116.66876762, 104.00698793 }; // 差し引かれる平均値
+	const auto mean = cv::Scalar{ 122.67891434, 116.66876762, 104.00698793 };	// 差し引かれる平均値
 	const auto swap = false;													// チャンネルの順番（True: RGB、False: BGR）
 	const auto crop = false;													// クロップ
 	model_->setInputParams(scale, size, mean, swap, crop);
@@ -47,6 +48,7 @@ auto TextDetector::detect_vertices(const cv::Mat& image) -> std::optional<TextPo
 	model_->detect(image, text_position.vertices_, text_position.confidences_);
 	return text_position;
 }
+
 auto TextDetector::detect_rotated_rectangles(const cv::Mat& image) -> std::optional<RotatedTextPosition> {
 	if (model_ == nullptr) {
 		return std::nullopt;
