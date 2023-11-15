@@ -139,6 +139,7 @@
     <ClCompile Include="7_3.cpp" />
     <ClCompile Include="7_5.cpp" />
     <ClCompile Include="7_6.cpp" />
+    <ClCompile Include="7_7.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="TextDetector.cpp" />
     <ClCompile Include="TextRecognizer.cpp" />
@@ -155,6 +156,7 @@
     <ClInclude Include="7_3.h" />
     <ClInclude Include="7_5.h" />
     <ClInclude Include="7_6.h" />
+    <ClInclude Include="7_7.h" />
     <ClInclude Include="TextDetector.h" />
     <ClInclude Include="TextRecognizer.h" />
     <ClInclude Include="util.h" />

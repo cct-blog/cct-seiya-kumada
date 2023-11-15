@@ -81,6 +81,9 @@
     <ClCompile Include="TextRecognizer.cpp">
       <Filter>ソース ファイル\07</Filter>
     </ClCompile>
+    <ClCompile Include="7_7.cpp">
+      <Filter>ソース ファイル\07</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3_1.h">
@@ -120,6 +123,9 @@
       <Filter>ヘッダー ファイル\07</Filter>
     </ClInclude>
     <ClInclude Include="TextRecognizer.h">
+      <Filter>ヘッダー ファイル\07</Filter>
+    </ClInclude>
+    <ClInclude Include="7_7.h">
       <Filter>ヘッダー ファイル\07</Filter>
     </ClInclude>
   </ItemGroup>
