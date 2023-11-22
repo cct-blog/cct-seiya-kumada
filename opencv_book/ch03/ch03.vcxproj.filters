@@ -37,6 +37,12 @@
     <Filter Include="ヘッダー ファイル\util">
       <UniqueIdentifier>{c56d634a-8759-406e-b4e7-f8e70857ddff}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\08">
+      <UniqueIdentifier>{2f242194-e10c-43de-ac96-fabf149a8e35}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\08">
+      <UniqueIdentifier>{6627cb2f-65d2-4b8a-ae41-35590626f313}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -84,6 +90,12 @@
     <ClCompile Include="7_7.cpp">
       <Filter>ソース ファイル\07</Filter>
     </ClCompile>
+    <ClCompile Include="CropLayer.cpp">
+      <Filter>ソース ファイル\08</Filter>
+    </ClCompile>
+    <ClCompile Include="8_2.cpp">
+      <Filter>ソース ファイル\08</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3_1.h">
@@ -127,6 +139,12 @@
     </ClInclude>
     <ClInclude Include="7_7.h">
       <Filter>ヘッダー ファイル\07</Filter>
+    </ClInclude>
+    <ClInclude Include="8_2.h">
+      <Filter>ヘッダー ファイル\08</Filter>
+    </ClInclude>
+    <ClInclude Include="CropLayer.h">
+      <Filter>ヘッダー ファイル\08</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
