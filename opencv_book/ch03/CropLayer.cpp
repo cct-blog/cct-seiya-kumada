@@ -15,7 +15,9 @@ void CropLayer::forward(
 	std::vector<cv::Mat*>&	inputs,
 	std::vector<cv::Mat>&	outputs,
 	std::vector<cv::Mat>&	internals) {
-	
+
+	auto r = inputs[0][0](cv::Rect(xstart_, ystart_, xend_ - xstart_, yend_ - ystart_)).clone();
+	outputs.emplace_back(r);
 }
 
 bool CropLayer::getMemoryShapes(
@@ -40,8 +42,6 @@ bool CropLayer::getMemoryShapes(
 	ystart_ = (inputHeight - targetHeight) / 2;
 	xend_ = xstart_ + targetWidth;
 	yend_ = ystart_ + targetHeight;
-
-	ystart_ = (inputHeight - targetHeight) / 2;
 
 	outputs.clear();
 	auto v = cv::dnn::MatShape{ batchSize, numChannels, targetHeight, targetWidth };
