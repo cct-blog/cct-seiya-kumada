@@ -12,12 +12,16 @@ cv::Ptr<cv::dnn::Layer> CropLayer::create(cv::dnn::LayerParams& params) {
 }
 
 void CropLayer::forward(
-	std::vector<cv::Mat*>&	inputs,
-	std::vector<cv::Mat>&	outputs,
-	std::vector<cv::Mat>&	internals) {
+	std::vector<cv::Mat*>& inputs,
+	std::vector<cv::Mat>& outputs,
+	std::vector<cv::Mat>& internals) {
 
-	auto r = inputs[0][0](cv::Rect(xstart_, ystart_, xend_ - xstart_, yend_ - ystart_)).clone();
-	outputs.emplace_back(r);
+	const auto& blob = *inputs[0];
+	// 320==yend_-ystart_
+	// 480==xend_ - xstart_
+	// bach_size, channel, h, w
+	cv::Range ranges[4] = { cv::Range::all(), cv::Range::all(), cv::Range(ystart_, yend_), cv::Range(xstart_, xend_) };
+	outputs[0] = blob(ranges).clone();
 }
 
 bool CropLayer::getMemoryShapes(
@@ -43,8 +47,10 @@ bool CropLayer::getMemoryShapes(
 	xend_ = xstart_ + targetWidth;
 	yend_ = ystart_ + targetHeight;
 
+	//std::cout << "xs=" << xstart_ << " ys= " << ystart_ << "  xe=" << xend_ << " ye=" << yend_ << std::endl;
 	outputs.clear();
 	auto v = cv::dnn::MatShape{ batchSize, numChannels, targetHeight, targetWidth };
+	//std::cout << "bs=" << batchSize << " nc=" << numChannels << " th=" << targetHeight << " tw=" << targetWidth << std::endl;
 	outputs.emplace_back(v);
 	return true;
 }
