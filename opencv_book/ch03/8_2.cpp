@@ -65,6 +65,14 @@ void dnn_custom_layer() {
 	//cv::imwrite(output_path, image);
 	cv::waitKey(0);
 
-
+	// 小ネタ集
+	// 画素値へのアクセス方法
+	// BGRの件
+	// https://qiita.com/yoya/items/bfef7404ded22649a2af
+	// roiの件
+	// 演算子のオーバーロード
+	// (batch, channels, h, w)
+	// convexhull, delauny
+	//  
 
 }
