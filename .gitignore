@@ -92,4 +92,10 @@ tensor_network/.mypy_cache/*
 opencv_book/x64/*
 opencv_book/ch03/*.user
 opencv_book/ch03/x64/*
-
+opencv_koneta/opencv_koneta/x64/*
+*.user
+opencv_koneta/opencv_koneta/bgr/x64/*
+opencv_koneta/opencv_koneta/overload/x64/*
+opencv_koneta/opencv_koneta/pixel_access/x64/*
+opencv_koneta/opencv_koneta/roi/x64/*
+opencv_koneta/opencv_koneta/blob/x64/*
