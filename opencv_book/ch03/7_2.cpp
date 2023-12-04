@@ -97,7 +97,7 @@ void opencv_face_detector() {
 
 	// äÁÇàÕÇﬁÅB
 	for (const auto& box : boxes) {
-		cv::rectangle(image, box, cv::Scalar(0, 0, 255), 1, cv::LINE_AA);
+		cv::rectangle(image, box, cv::Scalar(255, 255, 255), 1, cv::LINE_AA);
 	}
 
 	std::cout << std::endl;
