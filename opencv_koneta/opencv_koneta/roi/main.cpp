@@ -5,26 +5,26 @@
 void fill_with_black(cv::Mat& roi);
 
 int main(int argc, char* argv[]) {
-	const auto IMAGE_PATH = std::string{"C:/data/cct_blog/opencv_koneta/icelandlake2540.jpg"};
+	const auto IMAGE_PATH = std::string{"C:/data/cct_blog/opencv_koneta/Parrots.bmp"};
 	auto image = cv::imread(IMAGE_PATH);
 	const auto rows = image.rows;
 	const auto cols = image.cols;
 	std::cout << boost::format("rows:%1%, cols:%2%") % rows % cols << std::endl;
-	// rows: 1440, cols: 2560
 	
 	auto x = cols / 2;
 	auto y = rows / 2;
-	auto width = 500;
-	auto height = 500;
+	auto width = 50;
+	auto height = 50;
 	auto rect = cv::Rect(x, y, width, height);
 
 	// ROIの抽出（コピーではなく参照である）
-	auto roi = image(rect);
+	auto roi = image(rect);// .clone();
 
 	// ROIを真っ黒にする。
 	fill_with_black(roi);
 
 	cv::imshow("image", image);
+	cv::imwrite("C:/data/cct_blog/opencv_koneta/Parrots_roi.jpg", image);
 	cv::waitKey(0);
 	return 0;
 }

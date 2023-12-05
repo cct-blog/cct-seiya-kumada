@@ -12,6 +12,11 @@ int main(int argc, char* argv[]) {
         return -1;
     }
 
+    std::cout << boost::format("rows: %1%") % originalImage.rows << std::endl;
+    std::cout << boost::format("cols: %1%") % originalImage.cols << std::endl;
+    std::cout << boost::format("channels: %1%") % originalImage.channels() << std::endl;
+
+
     // blobFromImage を使って画像から blob を作成
     // パラメータは適宜調整する。
     double scalefactor = 1.0; // スケールファクター
@@ -30,6 +35,7 @@ int main(int argc, char* argv[]) {
 
     std::cout << boost::format("rows: %1%") % inputBlob.rows << std::endl; // -1が出る。無効な値
     std::cout << boost::format("cols: %1%") % inputBlob.cols << std::endl; // -1が出る。無効な値
+    std::cout << boost::format("channels: %1%") % inputBlob.channels() << std::endl; // 1が出る。無効な値
 
     auto height = inputBlob.size[2];
     auto width = inputBlob.size[3];

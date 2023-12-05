@@ -11,8 +11,8 @@ typedef void Method(const cv::Mat&);
 void repeat(int num, Method method, const cv::Mat& image);
 
 int main(int argc, char* argv[]) {
-	const auto WIDTH = 2000;
-	const auto HEIGHT = 2000;
+	const auto WIDTH = 3000;
+	const auto HEIGHT = 3000;
 	const auto image = cv::Mat{ HEIGHT, WIDTH, CV_8UC3, cv::Scalar{0, 0, 0} };
 	const auto NUM = 100;
 
@@ -60,7 +60,7 @@ void method_at(const cv::Mat& image) {
 	for (auto j = 0; j < rows; ++j) {
 		for (auto i = 0; i < cols; ++i) {
 			// ピクセルにアクセス
-			cv::Vec3b pixel = image.at<cv::Vec3b>(j, i); // j行目、i列目の画素を取得
+			const cv::Vec3b& pixel = image.at<cv::Vec3b>(j, i); // j行目、i列目の画素を取得
 			
 			// 色成分を取得
 			uchar blue = pixel[0];
@@ -104,7 +104,6 @@ void method_pointer(const cv::Mat& image) {
 			target_row[i] = cv::Vec3b(new_blue, new_green, new_red);
 		}
 	}
-
 }
 
 // iteratorを用いた実装
