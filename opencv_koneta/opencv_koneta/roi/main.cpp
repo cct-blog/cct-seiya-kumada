@@ -1,6 +1,6 @@
 #include <opencv2/opencv.hpp>
 #include <iostream>
-#include <boost/format.hpp>
+#include <format>
 
 void fill_with_black(cv::Mat& roi);
 
@@ -9,7 +9,7 @@ int main(int argc, char* argv[]) {
 	auto image = cv::imread(IMAGE_PATH);
 	const auto rows = image.rows;
 	const auto cols = image.cols;
-	std::cout << boost::format("rows:%1%, cols:%2%") % rows % cols << std::endl;
+	std::cout << std::format("rows:{}, cols:{}", rows,  cols) << std::endl;
 	
 	auto x = cols / 2;
 	auto y = rows / 2;

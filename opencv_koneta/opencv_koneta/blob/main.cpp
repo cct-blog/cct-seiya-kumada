@@ -1,5 +1,5 @@
 #include <opencv2/opencv.hpp>
-#include <boost/format.hpp>
+#include <format>
 
 int main(int argc, char* argv[]) {
 	// blobに設定したい画像
@@ -12,9 +12,9 @@ int main(int argc, char* argv[]) {
         return -1;
     }
 
-    std::cout << boost::format("rows: %1%") % originalImage.rows << std::endl;
-    std::cout << boost::format("cols: %1%") % originalImage.cols << std::endl;
-    std::cout << boost::format("channels: %1%") % originalImage.channels() << std::endl;
+    std::cout << std::format("rows: {}", originalImage.rows) << std::endl;
+    std::cout << std::format("cols: {}", originalImage.cols) << std::endl;
+    std::cout << std::format("channels: {}", originalImage.channels()) << std::endl;
 
 
     // blobFromImage を使って画像から blob を作成
@@ -27,15 +27,15 @@ int main(int argc, char* argv[]) {
     auto originalImages = std::vector<cv::Mat>{ originalImage, originalImage.clone() };
     auto inputBlob = cv::dnn::blobFromImages(originalImages, scalefactor, size, mean, swapRB, false);
 
-    std::cout << boost::format("dim: %1%") % inputBlob.dims << std::endl;
-    std::cout << boost::format("batch size: %1%") % inputBlob.size[0] << std::endl;
-    std::cout << boost::format("channels: %1%") % inputBlob.size[1] << std::endl;
-    std::cout << boost::format("height: %1%") % inputBlob.size[2] << std::endl;
-    std::cout << boost::format("width: %1%") % inputBlob.size[3] << std::endl;
+    std::cout << std::format("dim: {}", inputBlob.dims) << std::endl;
+    std::cout << std::format("batch size: {}", inputBlob.size[0]) << std::endl;
+    std::cout << std::format("channels: {}", inputBlob.size[1]) << std::endl;
+    std::cout << std::format("height: {}", inputBlob.size[2]) << std::endl;
+    std::cout << std::format("width: {}", inputBlob.size[3]) << std::endl;
 
-    std::cout << boost::format("rows: %1%") % inputBlob.rows << std::endl; // -1が出る。無効な値
-    std::cout << boost::format("cols: %1%") % inputBlob.cols << std::endl; // -1が出る。無効な値
-    std::cout << boost::format("channels: %1%") % inputBlob.channels() << std::endl; // 1が出る。無効な値
+    std::cout << std::format("rows: {}", inputBlob.rows) << std::endl; // -1が出る。無効な値
+    std::cout << std::format("cols: {}", inputBlob.cols) << std::endl; // -1が出る。無効な値
+    std::cout << std::format("channels: {}", inputBlob.channels()) << std::endl; // 1が出る。無効な値
 
     auto height = inputBlob.size[2];
     auto width = inputBlob.size[3];
