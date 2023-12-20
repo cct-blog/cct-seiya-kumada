@@ -25,7 +25,7 @@ def update(params, grads, lr):
 def create_dataset(a, b, n, seed):
     np.random.seed(seed)
     x = np.random.rand(N)
-    y = a * x + b + np.random.randn(n)
+    y = a * x + b + 0.5 * np.random.randn(n)
     return jnp.array(x), jnp.array(y)
 
 
@@ -33,7 +33,7 @@ def create_dataset(a, b, n, seed):
 grad_loss = jax.grad(loss, argnums=[0])
 
 
-@jax.jit
+#@jax.jit
 def train_(x, y, params):
     # d(loss)/dx
     grads = grad_loss(params, x, y)
@@ -42,7 +42,7 @@ def train_(x, y, params):
     return params
 
 
-@jax.jit
+#@jax.jit
 def train(epochs, x, y, lr, params):
     def body_fun(idx, params):
         # d(loss)/dx
@@ -61,7 +61,7 @@ def train(epochs, x, y, lr, params):
 
 
 def display_line(x, y, params):
-    plt.scatter(x, y)
+    plt.scatter(x, y, color='orange')
     plt.xlabel("x")
     plt.ylabel("y")
     xs = np.linspace(0, 1, 100)
@@ -77,8 +77,8 @@ if __name__ == "__main__":
     # create dataset
     N = 100
     seed = 1
-    true_a = 3
-    true_b = 1
+    true_a = 5 
+    true_b = 2 
     x, y = create_dataset(true_a, true_b, N, seed)
 
     # initialize params
@@ -86,21 +86,23 @@ if __name__ == "__main__":
 
     # set hyperparameters
     epochs = 10000
-    lr = 1.0e-3
+    lr = 1.0e-2
 
-    # train
-    if len(args) == 2 and args[1] == "fori":
-        # run using fori!
-        start = time.time()
-        params = train(epochs, x, y, lr, params)
-        end = time.time()
-    else:
-        start = time.time()
-        for _ in range(epochs):
-            params = train_(x, y, params)
-        end = time.time()
-
-    print(f"{end - start}[sec]")
+    times = []
+    for _ in range(5):
+        # train
+        if len(args) == 2 and args[1] == "fori":
+            # run using fori!
+            start = time.time()
+            params = train(epochs, x, y, lr, params)
+            end = time.time()
+        else:
+            start = time.time()
+            for _ in range(epochs):
+                params = train_(x, y, params)
+            end = time.time()
+        times.append(end - start)
+    print(f"{np.mean(times)}[sec]")
 
     # display results
     for (k, v) in params.items():

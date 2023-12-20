@@ -34,14 +34,14 @@ def create_dataset(a, b, n, seed):
 
 
 def display_x_and_y(x, y):
-    plt.scatter(x, y)
+    plt.scatter(x, y, color="orange")
     plt.xlabel("x")
     plt.ylabel("y")
     plt.savefig("./fig_dataset.jpg")
 
 
 def display_line(x, y, a, b):
-    plt.scatter(x, y)
+    plt.scatter(x, y, color="orange")
     plt.xlabel("x")
     plt.ylabel("y")
     xs = np.linspace(0, 1, 100)
@@ -54,8 +54,8 @@ if __name__ == "__main__":
     # create dataset
     N = 100
     seed = 1
-    true_a = 3
-    true_b = 1
+    true_a = 5
+    true_b = 2 
     x, y = create_dataset(true_a, true_b, N, seed)
 
     display_x_and_y(x, y)
@@ -65,15 +65,18 @@ if __name__ == "__main__":
     b = torch.tensor([0.0], requires_grad=True)
 
     epochs = 10000
-    start = time.time()
-    for i in range(epochs):
-        zero_grad(a, b)
-        y_pred = model(x, a, b)
-        loss_value = loss(y_pred, y)
-        loss_value.backward()
-        update(a, b, lr=1e-2)
-    end = time.time()
-    print(f"{end - start}[sec]")
+    times = []
+    for _ in range(5):
+        start = time.time()
+        for i in range(epochs):
+            zero_grad(a, b)
+            y_pred = model(x, a, b)
+            loss_value = loss(y_pred, y)
+            loss_value.backward()
+            update(a, b, lr=1e-2)
+        end = time.time()
+        times.append(end - start)
+    print(f"{np.mean(times)}[sec]")
 
     print(f"a {a.item()}")
     print(f"b {b.item()}")
