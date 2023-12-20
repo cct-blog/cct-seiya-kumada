@@ -1,0 +1,18 @@
+#!/bin/bash
+
+# shoe OK
+for ind in {0..0}; do
+	python -m src.predict \
+		--dataset_dir_path /home/ubuntu/data/synthetic_scenes/train/shoe \
+		--dataset_dir_name small_rgb \
+		--pose_dir_name pose \
+		--image_ext png \
+		--width 256 \
+		--height 256 \
+		--ind ${ind} \
+		--model_path /home/ubuntu/data/synthetic_scenes/outputs/shoe/epoch_1.state \
+		--t_n 0.0 \
+		--t_f 2.5 \
+		--view_path /home/ubuntu/data/synthetic_scenes/outputs/shoe/views/${ind}.jpg
+done
+

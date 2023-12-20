@@ -1,0 +1,16 @@
+#!/bin/bash
+# train
+python -m src.train \
+	--dataset_dir_path /home/ubuntu/data/synthetic_scenes/train/shoe \
+	--dataset_dir_name small_rgb \
+	--output_dir_path /home/ubuntu/data/synthetic_scenes/outputs/shoe \
+	--pose_dir_name pose \
+	--image_ext png \
+	--width 256 \
+	--height 256 \
+	--saving_interval 2  \
+	--t_n 0 \
+	--t_f 2.5 \
+	--epochs 1 \
+	--batch_size 2048
+

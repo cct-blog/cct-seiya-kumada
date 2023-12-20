@@ -1,0 +1,60 @@
+{
+    "[python]": {
+        "editor.tabSize": 4,
+        "editor.formatOnSave": true,
+        "editor.formatOnPaste": false,
+        "editor.formatOnType": false,
+        "editor.insertSpaces": true,
+        "editor.codeActionsOnSave": {
+            "source.organizeImports": "explicit"
+        },
+    },
+    "python.languageServer": "Pylance",
+    "python.envFile": "${workspaceFolder}/.env",
+    "autoDocstring.docstringFormat": "google",
+    "editor.defaultFormatter": "ms-python.black-formatter",
+    "black-formatter.args": [
+        "--line-length",
+        "128"
+    ],
+    "flake8.severity": {
+        "E": "Warning",
+        "F": "Warning",
+    },
+    "flake8.args": [
+        "--max-line-length",
+        "128",
+        "--ignore",
+        "E203,W503,E231"
+    ],
+    "editor.codeActionsOnSave": {
+        "source.organizeImports": "explicit"
+    },
+    "mypy-type-checker.severity": {
+        "error": "Information",
+    },
+    "mypy-type-checker.args": [
+        "--warn-return-any",
+        "--no-implicit-optional",
+        "--disallow-untyped-calls",
+        "--disallow-untyped-defs",
+        "--ignore-missing-imports",
+        "--follow-imports=skip",
+        "--strict"
+    ],
+    "python.analysis.typeCheckingMode": "basic",
+    "python.analysis.autoImportCompletions": true,
+    "isort.args": [
+        "--profile",
+        "black"
+    ],
+    "files.insertFinalNewline": true,
+    "files.trimTrailingWhitespace": true,
+    "python.defaultInterpreterPath": "/home/ubuntu/anaconda3/envs/pytorch_p38/bin/python",
+    "terminal.integrated.profiles.linux": {
+        "bash": {
+            "path": "bash",
+            "icon": "terminal-bash"
+        },
+    }
+}

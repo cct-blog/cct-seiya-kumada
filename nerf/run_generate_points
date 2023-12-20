@@ -1,0 +1,20 @@
+#!/bin/bash
+N=200
+SIGMA_THRESHOLD=100
+python -m src.generate_points \
+	--output_path /home/ubuntu/data/synthetic_scenes/outputs/shoe/points/points_size_${N}_sigma_${SIGMA_THRESHOLD}.txt \
+	--size ${N} \
+	--sigma_threshold ${SIGMA_THRESHOLD} \
+	--model_path /home/ubuntu/data/synthetic_scenes/outputs/shoe/epoch_1.state \
+	--t_n 0.0 \
+	--t_f 2.5 \
+	--ox 0.02144805 \
+	--oy -0.03721913 \
+	--oz 0.7881192 \
+	--xmin -1.5 \
+	--xmax 1.5 \
+	--ymin -1.5 \
+	--ymax 1.5 \
+	--zmin -1.5  \
+	--zmax 1.5
+

@@ -1,0 +1,16 @@
+#!/bin/bash
+
+AXIS=z
+python -m src.predict_rotation \
+	--dataset_dir_path /home/ubuntu/data/synthetic_scenes/train/shoe \
+	--dataset_dir_name small_rgb \
+	--pose_dir_name pose \
+	--image_ext png \
+	--width 256 \
+	--height 256 \
+	--ind 0 \
+	--model_path /home/ubuntu/data/synthetic_scenes/outputs/shoe/epoch_1.state \
+	--t_n 0.0 \
+	--t_f 2.5 \
+	--output_path /home/ubuntu/data/synthetic_scenes/outputs/shoe/views/rotation_${AXIS}.jpg \
+	--axis ${AXIS}
