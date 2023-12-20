@@ -7,7 +7,7 @@
         "editor.insertSpaces": true,
         "editor.codeActionsOnSave": {
             "source.organizeImports": true
-        },
+        }
     },
     "python.languageServer": "Pylance",
     "python.envFile": "${workspaceFolder}/.env",
@@ -33,7 +33,7 @@
         "--line-length",
         "80"
     ],
-    "python.defaultInterpreterPath": "C:\\Users\\seiya.kumada\\Anaconda3\\envs\\gaussian_process\\python.exe",
+    "python.defaultInterpreterPath": "C:\\Users\\seiya.kumada\\Anaconda3\\envs\\pmdarima\\python.exe",
     "terminal.integrated.profiles.windows": {
         "PowerShell": {
             "source": "PowerShell",
@@ -43,12 +43,13 @@
             "path": [
                 "${env:windir}\\System32\\cmd.exe",
             ],
-            "args": ["/K", "C:\\Users\\seiya.kumada\\Anaconda3\\Scripts\\activate.bat", "C:\\Users\\seiya.kumada\\Anaconda3\\envs\\gaussian_process" ],
+            "args": ["/K", "C:\\Users\\seiya.kumada\\Anaconda3\\Scripts\\activate.bat", "C:\\Users\\seiya.kumada\\Anaconda3\\envs\\pmdarima" ],
             "icon": "terminal-cmd"
         },
         "Git Bash": {
             "source": "Git Bash"
         }
-    }
+    },
+    "editor.minimap.enabled": false
 }
 

@@ -1,6 +1,7 @@
 # black
 black --line-length 128 .
 
+
 # mypy
 #mypy --strict --follow-imports skip regression_with_jax.py > mypy.txt
 

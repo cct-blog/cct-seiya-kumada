@@ -1,0 +1,77 @@
+{
+    "[python]": {
+        "editor.tabSize": 4,
+        "editor.formatOnSave": true,
+        "editor.formatOnPaste": false,
+        "editor.formatOnType": false,
+        "editor.insertSpaces": true,
+        "editor.codeActionsOnSave": {
+            "source.organizeImports": true
+        }
+    },
+    "python.languageServer": "Pylance",
+    "python.envFile": "${workspaceFolder}/.env",
+    "autoDocstring.docstringFormat": "google",
+    "editor.defaultFormatter": "ms-python.black-formatter",
+    "black-formatter.args": [
+        "--line-length",
+        "100"
+    ],
+    "flake8.severity": {
+        "E": "Warning",
+        "F": "Warning",
+    },
+    "flake8.args": [
+        "--max-line-length",
+        "100",
+        "--ignore",
+        "E203,W503,E231,W605",
+        "--max-complexity",
+        "10"
+    ],
+    "editor.codeActionsOnSave": {
+        "source.organizeImports": true
+    },
+    "mypy-type-checker.severity": {
+        "error": "Information",
+    },
+    "mypy-type-checker.args": [
+        "--warn-return-any",
+        "--no-implicit-optional",
+        "--disallow-untyped-calls",
+        "--disallow-untyped-defs",
+        "--ignore-missing-imports",
+        "--follow-imports=skip",
+        "--strict"
+    ],
+    "python.analysis.typeCheckingMode": "basic",
+    "python.analysis.autoImportCompletions": true,
+    "isort.args": [
+        "--profile", "black"
+    ],
+    "files.insertFinalNewline": true,
+    "files.trimTrailingWhitespace": true,
+
+    "python.defaultInterpreterPath": "C:\\Users\\seiya.kumada\\Anaconda3\\envs\\tensor_network\\python.exe",
+    "terminal.integrated.profiles.windows": {
+        "PowerShell": {
+            "source": "PowerShell",
+            "icon": "terminal-powershell"
+        },
+        "Command Prompt": {
+            "path": [
+                "${env:windir}\\System32\\cmd.exe",
+            ],
+            "args": [
+                "/K",
+                "C:\\Users\\seiya.kumada\\Anaconda3\\Scripts\\activate.bat",
+                "C:\\Users\\seiya.kumada\\Anaconda3\\envs\\tensor_network"
+            ],
+            "icon": "terminal-cmd"
+        },
+        "Git Bash": {
+            "source": "Git Bash"
+        }
+    },
+    "editor.minimap.enabled": false
+}

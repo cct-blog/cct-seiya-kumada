@@ -1,0 +1,150 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="ソース ファイル">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="ヘッダー ファイル">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="リソース ファイル">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\03">
+      <UniqueIdentifier>{23d9b328-e588-4d27-b5d8-2c8b4e2af597}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\03">
+      <UniqueIdentifier>{ff670d70-01b4-4cf2-a7f5-db61574abb4b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\04">
+      <UniqueIdentifier>{bf238358-5cc9-4c86-8042-efa0a45db7eb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\04">
+      <UniqueIdentifier>{2fc613e3-ccd4-46ee-b76e-52c7a3143727}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\07">
+      <UniqueIdentifier>{2ada1246-6dbf-423f-bac8-6ea6c42df93d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\07">
+      <UniqueIdentifier>{5ad714d9-4a3e-4500-a184-cc3d6ca8ee5b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\util">
+      <UniqueIdentifier>{d2718acd-5d31-4490-851a-5f8e00ced2bd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\util">
+      <UniqueIdentifier>{c56d634a-8759-406e-b4e7-f8e70857ddff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\08">
+      <UniqueIdentifier>{2f242194-e10c-43de-ac96-fabf149a8e35}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\08">
+      <UniqueIdentifier>{6627cb2f-65d2-4b8a-ae41-35590626f313}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="3_1.cpp">
+      <Filter>ソース ファイル\03</Filter>
+    </ClCompile>
+    <ClCompile Include="3_2.cpp">
+      <Filter>ソース ファイル\03</Filter>
+    </ClCompile>
+    <ClCompile Include="3_3.cpp">
+      <Filter>ソース ファイル\03</Filter>
+    </ClCompile>
+    <ClCompile Include="3_4.cpp">
+      <Filter>ソース ファイル\03</Filter>
+    </ClCompile>
+    <ClCompile Include="3_5.cpp">
+      <Filter>ソース ファイル\03</Filter>
+    </ClCompile>
+    <ClCompile Include="4_3.cpp">
+      <Filter>ソース ファイル\04</Filter>
+    </ClCompile>
+    <ClCompile Include="7_2.cpp">
+      <Filter>ソース ファイル\07</Filter>
+    </ClCompile>
+    <ClCompile Include="7_3.cpp">
+      <Filter>ソース ファイル\07</Filter>
+    </ClCompile>
+    <ClCompile Include="7_5.cpp">
+      <Filter>ソース ファイル\07</Filter>
+    </ClCompile>
+    <ClCompile Include="util.cpp">
+      <Filter>ソース ファイル\util</Filter>
+    </ClCompile>
+    <ClCompile Include="7_6.cpp">
+      <Filter>ソース ファイル\07</Filter>
+    </ClCompile>
+    <ClCompile Include="TextDetector.cpp">
+      <Filter>ソース ファイル\07</Filter>
+    </ClCompile>
+    <ClCompile Include="TextRecognizer.cpp">
+      <Filter>ソース ファイル\07</Filter>
+    </ClCompile>
+    <ClCompile Include="7_7.cpp">
+      <Filter>ソース ファイル\07</Filter>
+    </ClCompile>
+    <ClCompile Include="CropLayer.cpp">
+      <Filter>ソース ファイル\08</Filter>
+    </ClCompile>
+    <ClCompile Include="8_2.cpp">
+      <Filter>ソース ファイル\08</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="3_1.h">
+      <Filter>ヘッダー ファイル\03</Filter>
+    </ClInclude>
+    <ClInclude Include="3_2.h">
+      <Filter>ヘッダー ファイル\03</Filter>
+    </ClInclude>
+    <ClInclude Include="3_3.h">
+      <Filter>ヘッダー ファイル\03</Filter>
+    </ClInclude>
+    <ClInclude Include="3_4.h">
+      <Filter>ヘッダー ファイル\03</Filter>
+    </ClInclude>
+    <ClInclude Include="3_5.h">
+      <Filter>ヘッダー ファイル\03</Filter>
+    </ClInclude>
+    <ClInclude Include="4_3.h">
+      <Filter>ヘッダー ファイル\04</Filter>
+    </ClInclude>
+    <ClInclude Include="7_2.h">
+      <Filter>ヘッダー ファイル\07</Filter>
+    </ClInclude>
+    <ClInclude Include="7_3.h">
+      <Filter>ヘッダー ファイル\07</Filter>
+    </ClInclude>
+    <ClInclude Include="7_5.h">
+      <Filter>ヘッダー ファイル\07</Filter>
+    </ClInclude>
+    <ClInclude Include="util.h">
+      <Filter>ヘッダー ファイル\util</Filter>
+    </ClInclude>
+    <ClInclude Include="7_6.h">
+      <Filter>ヘッダー ファイル\07</Filter>
+    </ClInclude>
+    <ClInclude Include="TextDetector.h">
+      <Filter>ヘッダー ファイル\07</Filter>
+    </ClInclude>
+    <ClInclude Include="TextRecognizer.h">
+      <Filter>ヘッダー ファイル\07</Filter>
+    </ClInclude>
+    <ClInclude Include="7_7.h">
+      <Filter>ヘッダー ファイル\07</Filter>
+    </ClInclude>
+    <ClInclude Include="8_2.h">
+      <Filter>ヘッダー ファイル\08</Filter>
+    </ClInclude>
+    <ClInclude Include="CropLayer.h">
+      <Filter>ヘッダー ファイル\08</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
