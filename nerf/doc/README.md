@@ -33,7 +33,7 @@ python -m src.train \
 
 入力ディレクトリの構成
 
-[ここ](https://drive.google.com/drive/folders/1ScsRlnzy9Bd_n-xw83SP-0t548v63mPH)からダウンロードしたファイルsynthetic_scenes.zipのshoeを使用した。shoeの中にあるディレクトリrgbに格納された画像のサイズは512x512である。これを256x256に変更した画像をsmall_rgbに収めた。
+[ここ](https://drive.google.com/drive/folders/1ScsRlnzy9Bd_n-xw83SP-0t548v63mPH)からダウンロードしたファイルsynthetic_scenes.zipのshoeを使用した。shoeの中にあるディレクトリrgbに格納された画像のサイズは512x512である。これを256x256に変更した画像をsmall_rgbに収めた。計算に使うファイルとディレクトリは以下のものである。
 
 ```
 shoe/
@@ -41,6 +41,7 @@ shoe/
     pose/
     intrinsics.txt
 ```
+計算のあとoutput_dir_pathの下に訓練済みモデルが保存される。
 
 # 予測（run_predict）
 視点（pose内のパラメータ）を与えて画像を描画する。
@@ -73,6 +74,8 @@ done
 - t_f: レンダリングの上限（光線の上限）
 - view_path: 出力画像のパス
 
+以下は出力画像例である。
+![出力画像例](0.jpg)
 たまにcoarseかfineのどちらかの絵が真っ白になることがある。理由は不明。訓練し直すと直る。
 
 # 予測 with 回転（run_predict_rotation）
@@ -107,6 +110,9 @@ python -m src.predict_rotation \
 - t_f: レンダリングの上限（光線の上限）
 - output_path: 出力ディレクトリのパス
 
+以下は出力画像例である。
+![出力画像例](rotation_z.jpg)
+
 # 描画範囲の観察（run_draw_rendering_region）
 点群の存在範囲を見積もる。
 ```
@@ -140,7 +146,11 @@ python -m src.draw_rendering_region \
 - azim: azimuthal angle（度）
 - camera_interval: pose内のファイルを何個おきに読み込むか。
 
-標準出力に出力されるaverage focus（平均焦点座標）が点群生成時の視点になる。また、保存される画像を見て点群の存在範囲を適当に見積もる。
+標準出力に出力されるaverage focus（平均焦点座標）が点群生成時の視点になる。また、保存される画像を見て点群の存在範囲を適当に見積もる。以下の画像は出力画像例である。
+![出力画像例](shoe_0_90.jpg)
+![出力画像例](shoe_90_0.jpg)
+この例では、x,y,z軸方向ともに[-1.5,1.5]くらいか。
+
 
 # 点群の生成（run_generate_points）
 上の結果をもとに点群を生成する。
@@ -182,3 +192,4 @@ python -m src.generate_points \
 - zmax: 点群存在範囲
 
 出力ファイルは[Dai-Con Viewer](https://www.dai-con.net/dai-con-viewer/)で表示できる。
+![出力画像例](sample_point_cloud.jpg)
