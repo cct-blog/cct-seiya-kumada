@@ -99,3 +99,4 @@ opencv_koneta/opencv_koneta/overload/x64/*
 opencv_koneta/opencv_koneta/pixel_access/x64/*
 opencv_koneta/opencv_koneta/roi/x64/*
 opencv_koneta/opencv_koneta/blob/x64/*
+!nerf/doc/*.jpg
