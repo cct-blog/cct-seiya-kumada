@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "dbscan"
+version = "0.1.0"
+description = ""
+authors = ["Seiya Kumada <seiya.kumada@cct-inc.co.jp>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+matplotlib = "^3.8.4"
+pyclustering = "^0.10.1.2"
+scikit-learn = "^1.4.2"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
