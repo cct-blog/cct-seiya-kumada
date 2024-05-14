@@ -1,3 +1,5 @@
+import time
+
 import matplotlib.pyplot as plt
 import numpy as np
 from pyclustering.cluster.gmeans import gmeans
@@ -119,10 +121,19 @@ if __name__ == "__main__":
     draw_samples(X)
 
     # DBSCAN法を実行する。
+    start = time.time()
     execute_DBSCAN(X)
+    elapsed_time = time.time() - start
+    print(f"DBSCAN: {elapsed_time:.2f} sec")
 
     # KMeans法を実行する。
+    start = time.time()
     execute_KMeans(X)
+    elapsed_time = time.time() - start
+    print(f"K-means: {elapsed_time:.2f} sec")
 
     # GMeans法を実行する。
+    start = time.time()
     execute_GMeans(X)
+    elapsed_time = time.time() - start
+    print(f"G-means: {elapsed_time:.2f} sec")
