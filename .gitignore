@@ -100,3 +100,8 @@ opencv_koneta/opencv_koneta/pixel_access/x64/*
 opencv_koneta/opencv_koneta/roi/x64/*
 opencv_koneta/opencv_koneta/blob/x64/*
 !nerf/doc/*.jpg
+central_limit_theory/.venv
+central_limit_theory/outputs/*
+central_limit_theory/poetry.lock
+central_limit_theory/.python-version
+
