@@ -1,6 +1,5 @@
 import matplotlib.pyplot as plt
 import numpy as np
-from pyparsing import line
 
 
 def calcuate_means(N: int, K: int) -> list[float]:
