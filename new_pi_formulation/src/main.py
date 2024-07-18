@@ -34,10 +34,10 @@ def plot_values(ys_list, xs, file_name, pi_value=True):
     for lbd, ys in ys_list:
         plt.plot(xs, ys, "o-", label=f"Approximated π (λ={lbd})")
 
+    # 軸の目盛りのフォントを大きくしたい。
+    plt.xticks(fontsize=24)
+    plt.yticks(fontsize=24)
     plt.hlines([np.pi], xmin=1, xmax=15, linestyles="dashed")
-    plt.xlabel("Number of terms in the series")
-    plt.ylabel("Value of π")
-    plt.title("Approximation of π")
     plt.legend()
     plt.savefig(f"/home/kumada/projects/cct-seiya-kumada/new_pi_formulation/images/{file_name}.jpg")
 
@@ -47,10 +47,9 @@ def plot_diffs(ys_list, xs, file_name, pi_value=True):
     for lbd, ys in ys_list:
         plt.plot(xs, ys, "o-", label=f"Approximated π (λ={lbd})")
 
+    plt.xticks(fontsize=24)
+    plt.yticks(fontsize=24)
     plt.hlines([0], xmin=1, xmax=15, linestyles="dashed")
-    plt.xlabel("Number of terms in the series")
-    plt.ylabel("Value of π")
-    plt.title("Difference between π and the given series")
     plt.legend()
     plt.savefig(f"/home/kumada/projects/cct-seiya-kumada/new_pi_formulation/images/{file_name}.jpg")
 
