@@ -36,19 +36,6 @@ def calculate_diff_from_pi(values):
     return [np.abs(np.pi - value) for value in values]
 
 
-# def plot_values(ys_list, xs, file_name, pi_value=True):
-#    plt.figure(figsize=(10, 6))
-#    for lbd, ys in ys_list:
-#        plt.plot(xs, ys, "o-", label=f"Approximated π (λ={lbd})", linewidth=3)
-#
-#    # 軸の目盛りのフォントを大きくしたい。
-#    plt.xticks(fontsize=24)
-#    plt.yticks(fontsize=24)
-#    plt.hlines([np.pi], xmin=1, xmax=15, linestyles="dashed")
-#    plt.legend()
-#    plt.savefig(f"/home/kumada/projects/cct-seiya-kumada/new_pi_formulation/images/{file_name}.jpg")
-
-
 def plot_values_(ys_list, xs, zs, file_name):
     plt.figure(figsize=(10, 6))
     for lbd, ys in ys_list:
@@ -58,21 +45,9 @@ def plot_values_(ys_list, xs, zs, file_name):
     # 軸の目盛りのフォントを大きくしたい。
     plt.xticks(fontsize=24)
     plt.yticks(fontsize=24)
-    plt.hlines([np.pi], xmin=1, xmax=15, linestyles="dashed")
-    plt.legend()
+    plt.hlines([np.pi], xmin=0, xmax=15, linestyles="dashed")
+    plt.legend(fontsize=15)
     plt.savefig(f"/home/kumada/projects/cct-seiya-kumada/new_pi_formulation/images/{file_name}.jpg")
-
-
-# def plot_diffs(ys_list, xs, file_name, pi_value=True):
-#    plt.figure(figsize=(10, 6))
-#    for lbd, ys in ys_list:
-#        plt.plot(xs, ys, "o-", label=f"Approximated π (λ={lbd})", linewidth=3)
-#
-#    plt.xticks(fontsize=24)
-#    plt.yticks(fontsize=24)
-#    plt.hlines([0], xmin=1, xmax=15, linestyles="dashed")
-#    plt.legend()
-#    plt.savefig(f"/home/kumada/projects/cct-seiya-kumada/new_pi_formulation/images/{file_name}.jpg")
 
 
 def plot_diffs_(ys_list, xs, zs, file_name):
@@ -83,8 +58,8 @@ def plot_diffs_(ys_list, xs, zs, file_name):
     plt.plot(xs, zs, ":", label="Leibniz", linewidth=3)
     plt.xticks(fontsize=24)
     plt.yticks(fontsize=24)
-    plt.hlines([0], xmin=1, xmax=15, linestyles="dashed")
-    plt.legend()
+    plt.hlines([0], xmin=0, xmax=15, linestyles="dashed")
+    plt.legend(fontsize=15)
     plt.savefig(f"/home/kumada/projects/cct-seiya-kumada/new_pi_formulation/images/{file_name}.jpg")
 
 
