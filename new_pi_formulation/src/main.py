@@ -2,6 +2,7 @@ from math import factorial
 
 import matplotlib.pyplot as plt
 import numpy as np
+from matplotlib.lines import lineStyles
 
 # https://x.com/wakapaijazz/status/1804378231631437953
 
@@ -25,14 +26,34 @@ def calculate_pi_approx_lambda(limit, lambd=1):
     return approx
 
 
+# nsが1のとき[1], nsが2のとき1,2
+def calculate_leibniz_formula(ns):
+    approx = 4 + 4 * sum((-1) ** n / (2 * n + 1) for n in range(1, ns + 1))
+    return approx
+
+
 def calculate_diff_from_pi(values):
     return [np.abs(np.pi - value) for value in values]
 
 
-def plot_values(ys_list, xs, file_name, pi_value=True):
+# def plot_values(ys_list, xs, file_name, pi_value=True):
+#    plt.figure(figsize=(10, 6))
+#    for lbd, ys in ys_list:
+#        plt.plot(xs, ys, "o-", label=f"Approximated π (λ={lbd})", linewidth=3)
+#
+#    # 軸の目盛りのフォントを大きくしたい。
+#    plt.xticks(fontsize=24)
+#    plt.yticks(fontsize=24)
+#    plt.hlines([np.pi], xmin=1, xmax=15, linestyles="dashed")
+#    plt.legend()
+#    plt.savefig(f"/home/kumada/projects/cct-seiya-kumada/new_pi_formulation/images/{file_name}.jpg")
+
+
+def plot_values_(ys_list, xs, zs, file_name):
     plt.figure(figsize=(10, 6))
     for lbd, ys in ys_list:
-        plt.plot(xs, ys, "o-", label=f"Approximated π (λ={lbd})")
+        plt.plot(xs, ys, "o-", label=f"Approximated π (λ={lbd})", linewidth=3)
+    plt.plot(xs, zs, ":", label="Leibniz", linewidth=3)
 
     # 軸の目盛りのフォントを大きくしたい。
     plt.xticks(fontsize=24)
@@ -42,11 +63,24 @@ def plot_values(ys_list, xs, file_name, pi_value=True):
     plt.savefig(f"/home/kumada/projects/cct-seiya-kumada/new_pi_formulation/images/{file_name}.jpg")
 
 
-def plot_diffs(ys_list, xs, file_name, pi_value=True):
+# def plot_diffs(ys_list, xs, file_name, pi_value=True):
+#    plt.figure(figsize=(10, 6))
+#    for lbd, ys in ys_list:
+#        plt.plot(xs, ys, "o-", label=f"Approximated π (λ={lbd})", linewidth=3)
+#
+#    plt.xticks(fontsize=24)
+#    plt.yticks(fontsize=24)
+#    plt.hlines([0], xmin=1, xmax=15, linestyles="dashed")
+#    plt.legend()
+#    plt.savefig(f"/home/kumada/projects/cct-seiya-kumada/new_pi_formulation/images/{file_name}.jpg")
+
+
+def plot_diffs_(ys_list, xs, zs, file_name):
     plt.figure(figsize=(10, 6))
     for lbd, ys in ys_list:
-        plt.plot(xs, ys, "o-", label=f"Approximated π (λ={lbd})")
+        plt.plot(xs, ys, "o-", label=f"Approximated π (λ={lbd})", linewidth=3)
 
+    plt.plot(xs, zs, ":", label="Leibniz", linewidth=3)
     plt.xticks(fontsize=24)
     plt.yticks(fontsize=24)
     plt.hlines([0], xmin=1, xmax=15, linestyles="dashed")
@@ -72,10 +106,16 @@ if __name__ == "__main__":
         diff_list.append((lbd, diff))
 
     file_name = "pi_values"
-    plot_values(ys_list, xs, file_name)
+
+    zs = [calculate_leibniz_formula(x) for x in xs]
+    z_diff = calculate_diff_from_pi(zs)
+
+    # plot_values(ys_list, xs, file_name)
+    plot_values_(ys_list, xs, zs, file_name)
 
     file_name = "diff_values"
-    plot_diffs(diff_list, xs, file_name, pi_value=False)
+    # plot_diffs(diff_list, xs, file_name, pi_value=False)
+    plot_diffs_(diff_list, xs, z_diff, file_name)
 
     diffs = []
     for _, diff in diff_list:
