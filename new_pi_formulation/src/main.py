@@ -2,7 +2,10 @@ from math import factorial
 
 import matplotlib.pyplot as plt
 import numpy as np
-from matplotlib.lines import lineStyles
+
+# from scipy.special import poch as pochhammer
+
+# from matplotlib.lines import lineStyles
 
 # https://x.com/wakapaijazz/status/1804378231631437953
 
@@ -15,15 +18,15 @@ def pochhammer(x, n):
     return result
 
 
-def calculate_pi_term_lambda(n, lambd=1):
+def calculate_pi_term_lambda(n, lambd):
     a = (2 * n + 1) ** 2 / (4 * (n + lambd)) - n
     term = 1 / factorial(n) * (1 / (n + lambd) - 4 / (2 * n + 1)) * pochhammer(a, n - 1)
     return term
 
 
-def calculate_pi_approx_lambda(limit, lambd=1):
+def calculate_pi_approx_lambda(limit, lambd):
     approx = 4 + sum(calculate_pi_term_lambda(n, lambd) for n in range(1, limit + 1))
-    return approx
+    return approx.real
 
 
 # nsが1のとき[1], nsが2のとき1,2
@@ -36,7 +39,7 @@ def calculate_diff_from_pi(values):
     return [np.abs(np.pi - value) for value in values]
 
 
-def plot_values_(ys_list, xs, zs, file_name):
+def plot_values(ys_list, xs, zs, file_name):
     plt.figure(figsize=(10, 6))
     for lbd, ys in ys_list:
         plt.plot(xs, ys, "o-", label=f"Approximated π (λ={lbd})", linewidth=3)
@@ -50,7 +53,7 @@ def plot_values_(ys_list, xs, zs, file_name):
     plt.savefig(f"/home/kumada/projects/cct-seiya-kumada/new_pi_formulation/images/{file_name}.jpg")
 
 
-def plot_diffs_(ys_list, xs, zs, file_name):
+def plot_diffs(ys_list, xs, zs, file_name):
     plt.figure(figsize=(10, 6))
     for lbd, ys in ys_list:
         plt.plot(xs, ys, "o-", label=f"Approximated π (λ={lbd})", linewidth=3)
@@ -75,7 +78,8 @@ if __name__ == "__main__":
     ys_list = []
     diff_list = []
     for lbd in [0, 1, 2, 3]:
-        ys = [calculate_pi_approx_lambda(x, lbd) for x in xs]
+        # 複素数の時
+        ys = [calculate_pi_approx_lambda(x, lbd + 1j) for x in xs]
         diff = calculate_diff_from_pi(ys)
         ys_list.append((lbd, ys))
         diff_list.append((lbd, diff))
@@ -85,12 +89,11 @@ if __name__ == "__main__":
     zs = [calculate_leibniz_formula(x) for x in xs]
     z_diff = calculate_diff_from_pi(zs)
 
-    # plot_values(ys_list, xs, file_name)
-    plot_values_(ys_list, xs, zs, file_name)
+    plot_values(ys_list, xs, zs, file_name)
 
     file_name = "diff_values"
     # plot_diffs(diff_list, xs, file_name, pi_value=False)
-    plot_diffs_(diff_list, xs, z_diff, file_name)
+    plot_diffs(diff_list, xs, z_diff, file_name)
 
     diffs = []
     for _, diff in diff_list:
