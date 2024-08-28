@@ -55,9 +55,7 @@ def evaluate_kpss(df: pd.DataFrame) -> tuple[np.float64, np.float64]:
 
 def calculate_kpss_(df: pd.DataFrame) -> None:
     kpss_stat, p_value, lags, crit = sm.tsa.kpss(df["Global_Sales"])
-    print(
-        f"KPSS Statistic: {kpss_stat}, p-value: {p_value}, Lags Used: {lags}, Critical Values: {crit}"
-    )
+    print(f"KPSS Statistic: {kpss_stat}, p-value: {p_value}, Lags Used: {lags}, Critical Values: {crit}")
 
 
 def calculate_auto_correlation(lags: int, ticks: int, ts: pd.Series, path: str, title: str) -> None:
@@ -75,16 +73,14 @@ Tuple4Int = tuple[int, int, int, int]
 Tuple3Int = tuple[int, int, int]
 
 
-def execute_grid_search(
-    ts_train: pd.DataFrame, d: int, m: int
-) -> list[Tuple3Int, Tuple4Int, np.float64]:
+def execute_grid_search(ts_train: pd.DataFrame, d: int, m: int) -> list[Tuple3Int, Tuple4Int, np.float64]:
     # SARIMA(p,d,q)(sp,sd,sq)[s]の次数の範囲を決める。
     # 範囲は計算量を減らすため、経験上、p,d,qを0～2、sp,sd,sqを0～1くらいに限定する。
-    p = q = range(0, 3)
+    p = q = range(0, 4)
     if m == 0:
         sp = sd = sq = range(0, 1)
     else:
-        sp = sd = sq = range(0, 2)
+        sp = sd = sq = range(0, 4)
 
     # グリッドサーチのために、p,q,sp,sd,sqの組み合わせのリストを作成する。
     # 定常性の確認よりd=1,周期sは決め打ちで7としている。
@@ -136,9 +132,7 @@ def train(ts_train: pd.DataFrame, a: tuple[int, ...], A: tuple[int, ...]) -> SAR
     return model
 
 
-def predict(
-    arima_model: SARIMAXResultsWrapper, df_test: pd.DataFrame
-) -> tuple[pd.Series, pd.Series, pd.DataFrame]:
+def predict(arima_model: SARIMAXResultsWrapper, df_test: pd.DataFrame) -> tuple[pd.Series, pd.Series, pd.DataFrame]:
     # predict
     train_pred = arima_model.predict()
     test_pred = arima_model.forecast(len(df_test))
@@ -197,9 +191,7 @@ def draw_results(
     plt.clf()
 
 
-def draw_results_part(
-    df_test: pd.DataFrame, test_pred: pd.Series, test_pred_ci: pd.DataFrame, path: str
-) -> None:
+def draw_results_part(df_test: pd.DataFrame, test_pred: pd.Series, test_pred_ci: pd.DataFrame, path: str) -> None:
     # グラフ化
     plt.figure(figsize=(24, 4))
     # fig, ax = plt.subplots()
