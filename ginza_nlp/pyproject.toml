@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "ginza_nlp"
+version = "0.1.0"
+description = ""
+authors = ["Seiya Kumada <seiya.kumada@cct-inc.co.jp>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "3.11.7"
+ginza = "^5.2.0"
+ja-ginza-electra = "^5.2.0"
+spacy = "^3.8.2"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
