@@ -16,6 +16,7 @@ TOP_P=1.0
 MAX_TOKENS=1000
 ROOT_DIR_PATH=/home/kumada/projects/cct-seiya-kumada/deep_face
 
+
 #python -m src.main_with_gpt4o \
 #    --end_point ${END_POINT} \
 #    --secret_info_path ${SECRET_INFO_PATH} \
