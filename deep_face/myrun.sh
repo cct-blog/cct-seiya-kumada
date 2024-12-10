@@ -5,6 +5,7 @@ python -m src.main \
     --input_dir_path ./images/${SUBDIR_NAME} \
     --output_dir_path ./outputs/${SUBDIR_NAME} \
 
+
 END_POINT=https://2024-05-21-gpt4o.openai.azure.com/
 MODEL_NAME=2024-05-21-gpt4o
 #MODEL_NAME="2024-09-20-gpt4o"
@@ -14,6 +15,7 @@ TEMPERATURE=0.7
 TOP_P=1.0
 MAX_TOKENS=1000
 ROOT_DIR_PATH=/home/kumada/projects/cct-seiya-kumada/deep_face
+
 
 #python -m src.main_with_gpt4o \
 #    --end_point ${END_POINT} \
