@@ -105,3 +105,4 @@ central_limit_theory/outputs/*
 central_limit_theory/poetry.lock
 central_limit_theory/.python-version
 mypush.sh
+deep_translator_trial/src/__pycache__
