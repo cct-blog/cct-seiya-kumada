@@ -24,9 +24,9 @@ async def main() -> None:
     # 日本語で聞けば日本語エージェントに転送される。
     # reslt = await Runner.run(TRIAGE_AGENT, "こんにちは、お元気ですか")
     # 英語で聞けば英語エージェントに転送される。
-    # reslt = await Runner.run(TRIAGE_AGENT, "Hello, Hou are you?")
+    reslt = await Runner.run(TRIAGE_AGENT, "Hello, Hou are you?")
     # スペイン語で聞けばスペイン語エージェントに転送される。
-    reslt = await Runner.run(TRIAGE_AGENT, "Hola, ¿cómo estás?")
+    # reslt = await Runner.run(TRIAGE_AGENT, "Hola, ¿cómo estás?")
     print(reslt.final_output)
 
 
