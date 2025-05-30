@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "structured-outputs"
+version = "0.1.0"
+description = ""
+authors = ["Seiya <seiya.kumada@cct-inc.co.jp>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "3.13.0"
+dotenv = "^0.9.9"
+pydantic = "^2.11.5"
+openai = "^1.82.1"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
