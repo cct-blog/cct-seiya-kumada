@@ -1,5 +1,5 @@
 from openai import AzureOpenAI
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 import src.utils as utils
 
@@ -14,16 +14,16 @@ class Output(BaseModel):
         organization_names (list[str]): 抽出された組織名のリスト
     """
 
-    persons_name: str
-    datetime: str
-    organization_names: list[str]
+    persons_name: str = Field(description="抽出された人物名")
+    datetime: str = Field(description="抽出された日時")
+    organization_names: list[str] = Field(description="抽出された組織名のリスト")
 
 
-REVIEW_TEXT = """
-小泉氏は2015年10月から自民党の農林部会長を務め、JAグループの改革に取り組んだ。
-政府の規制改革会議は、競争力を強化するためにJA全農の株式会社化などの組織改革案を打ち出し、
-小泉氏も支持していた。
-"""
+REVIEW_TEXT = (
+    "小泉氏は2015年10月から自民党の農林部会長を務め、JAグループの改革に取り組んだ。"
+    "政府の規制改革会議は、競争力を強化するためにJA全農の株式会社化などの組織改革案を打ち出し、"
+    "小泉氏も支持していた。"
+)
 
 
 def print_output(output: Output) -> None:
@@ -59,6 +59,8 @@ if __name__ == "__main__":
                 "content": "以下のテキストから、人物名、日時、組織名を抽出してください。\n" f"{REVIEW_TEXT}",
             },
         ],
+        temperature=0.0,
+        top_p=1.0,
         response_format=Output,
     )
 
