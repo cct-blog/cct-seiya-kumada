@@ -1,3 +1,5 @@
+from unittest import skip
+
 from openai import AzureOpenAI
 from pydantic import BaseModel, Field
 
@@ -23,12 +25,14 @@ class Output(BaseModel):
         name (str): 名前
         email (str): メールアドレス
         phone (str): 電話番号
+        skills (list[str]): スキルのリスト
         experiences (list[WorkExperience]): 職務経歴のリスト
     """
 
     name: str = Field(description="名前")
     email: str = Field(description="メールアドレス")
     phone: str = Field(description="電話番号")
+    skills: list[str] = Field(description="スキルのリスト")
     experiences: list[WorkExperience] = Field(description="職務経歴のリスト")
 
 
@@ -52,6 +56,9 @@ def print_output(output: Output) -> None:
     print(f"名前: {output.name}")
     print(f"メールアドレス: {output.email}")
     print(f"電話番号: {output.phone}")
+    print("スキル:")
+    for skill in output.skills:
+        print(f"  - {skill}")
     print("職務経歴:")
     for exp in output.experiences:
         print(f"  - 会社名: {exp.company}, 役職: {exp.position}, 在籍年数: {exp.year}")
