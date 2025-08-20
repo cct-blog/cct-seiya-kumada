@@ -72,7 +72,7 @@ def visualize_extraction(result) -> None:
         f.write(html_content)
 
 
-def save_json(result):
+def save_json(result, path):
     # Save result as JSON file (only extraction_class, extraction_text, attributes)
     simplified_extractions = []
 
@@ -93,7 +93,7 @@ def save_json(result):
             }
         )
 
-    with open("extraction_result.json", "w", encoding="utf-8") as f:
+    with open(path, "w", encoding="utf-8") as f:
         json.dump(simplified_extractions, f, ensure_ascii=False, indent=2)
 
 
@@ -119,7 +119,7 @@ def main() -> None:
     else:
         print("Failed to load API key.")
 
-    prompt, examples, input_text = make_sample_02()
+    prompt, examples, input_text = make_sample_01()
 
     # Run the extraction
     result = lx.extract(
@@ -133,7 +133,7 @@ def main() -> None:
         use_schema_constraints=False,
     )
 
-    save_json(result)
+    save_json(result, "extraction_result_01.json")
     # visualize_extraction(result)
 
 
