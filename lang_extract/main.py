@@ -119,7 +119,7 @@ def main() -> None:
     else:
         print("Failed to load API key.")
 
-    prompt, examples, input_text = make_sample_01()
+    prompt, examples, input_text = make_sample_02()
 
     # Run the extraction
     result = lx.extract(
