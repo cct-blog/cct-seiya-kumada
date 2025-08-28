@@ -62,6 +62,46 @@ def define_extraction_task_02() -> tuple[str, list[lx.data.ExampleData]]:
     return prompt_description, examples
 
 
+def define_extraction_task_02_japanese() -> tuple[str, list[lx.data.ExampleData]]:
+    # Define extraction prompt
+    prompt_description = "テキストから、薬剤名、投薬量、投与経路、投与頻度、投与期間を抽出せよ。"
+
+    # Define example data with entities in order of appearance
+    examples = [
+        lx.data.ExampleData(
+            text="患者は250 mgのIVセファゾリンを1日3回、1週間投与された。",
+            extractions=[
+                lx.data.Extraction(extraction_class="投薬量", extraction_text="250 mg"),
+                lx.data.Extraction(extraction_class="投与経路", extraction_text="IV"),  # IV = 静脈内
+                lx.data.Extraction(extraction_class="薬剤名", extraction_text="セファゾリン"),
+                lx.data.Extraction(extraction_class="投与頻度", extraction_text="1日3回"),
+                lx.data.Extraction(extraction_class="投与期間", extraction_text="1週間"),
+            ],
+        )
+    ]
+    return prompt_description, examples
+
+
+def define_extraction_task_03_japanese() -> tuple[str, list[lx.data.ExampleData]]:
+    # Define extraction prompt
+    prompt_description = "テキストから、対象者、日時、場所、イベント、行動を抽出せよ。"
+
+    # Define example data with entities in order of appearance
+    examples = [
+        lx.data.ExampleData(
+            text="佐藤さんは、来週火曜日の10時から本社会議室で行われるプロジェクト進捗会議に出席するよう依頼された。",
+            extractions=[
+                lx.data.Extraction(extraction_class="対象者", extraction_text="佐藤さん"),
+                lx.data.Extraction(extraction_class="日時", extraction_text="来週火曜日の10時"),
+                lx.data.Extraction(extraction_class="場所", extraction_text="本社会議室"),
+                lx.data.Extraction(extraction_class="イベント", extraction_text="プロジェクト進捗会議"),
+                lx.data.Extraction(extraction_class="行動", extraction_text="出席するよう依頼された"),
+            ],
+        )
+    ]
+    return prompt_description, examples
+
+
 def visualize_extraction(result) -> None:
     # Save the results to a JSONL file
     lx.io.save_annotated_documents([result], output_name="extraction_results.jsonl", output_dir=".")
@@ -112,6 +152,22 @@ def make_sample_02():
     return prompt, examples, input_text
 
 
+def make_sample_02_japanese():
+    prompt, examples = define_extraction_task_02_japanese()
+    # The input text to be processed
+    # input_text = "患者はセルニルトン錠を、痛みを感じるときに一回2錠、飲むよう言われた。"
+    input_text = "医師からは、カロナール錠を発熱したときに1回1錠、服用するよう指示された。"
+    return prompt, examples, input_text
+
+
+def make_sample_03_japanese():
+    prompt, examples = define_extraction_task_03_japanese()
+    # The input text to be processed
+    # input_text = "田中さんは、今週金曜日に本社で行われる製品企画会議に出席するよう依頼された。"
+    input_text = "山本さんは、会議室Aで行われる打ち合せに呼ばれた。"
+    return prompt, examples, input_text
+
+
 def main() -> None:
     api_key = os.getenv("LANGEXTRACT_API_KEY")
     if api_key:
@@ -119,7 +175,7 @@ def main() -> None:
     else:
         print("Failed to load API key.")
 
-    prompt, examples, input_text = make_sample_01()
+    prompt, examples, input_text = make_sample_03_japanese()
 
     # Run the extraction
     result = lx.extract(
@@ -133,7 +189,7 @@ def main() -> None:
         use_schema_constraints=False,
     )
 
-    save_json(result, "extraction_result_01.json")
+    save_json(result, "extraction_result_03_japanese.json")
     # visualize_extraction(result)
 
 
