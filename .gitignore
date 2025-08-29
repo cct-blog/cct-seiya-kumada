@@ -211,3 +211,6 @@ pyrightconfig.json
 *.pdb
 stls/*
 nul
+
+claude_desktop_config.json
+sample.stl
