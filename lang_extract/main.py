@@ -102,6 +102,27 @@ def define_extraction_task_03_japanese() -> tuple[str, list[lx.data.ExampleData]
     return prompt_description, examples
 
 
+def define_extraction_task_04_japanese() -> tuple[str, list[lx.data.ExampleData]]:
+    # Define extraction prompt
+    prompt_description = "テキストから、対象者、日時、場所、イベント、行動を抽出せよ。"
+
+    # Define example data with entities in order of appearance
+    examples = [
+        # 条件分岐を含む例文を追加
+        lx.data.ExampleData(
+            text="田中さんは部長が9時に来れば9時から、来れなければ10時から営業会議に参加するように言われた。",
+            extractions=[
+                lx.data.Extraction(extraction_class="対象者", extraction_text="田中さん"),
+                lx.data.Extraction(extraction_class="日時", extraction_text="9時から", attributes={"条件": "部長が9時に来れば"}),
+                lx.data.Extraction(extraction_class="日時", extraction_text="10時から", attributes={"条件": "来れなければ"}),
+                lx.data.Extraction(extraction_class="イベント", extraction_text="営業会議"),
+                lx.data.Extraction(extraction_class="行動", extraction_text="参加するように言われた"),
+            ],
+        )
+    ]
+    return prompt_description, examples
+
+
 def visualize_extraction(result) -> None:
     # Save the results to a JSONL file
     lx.io.save_annotated_documents([result], output_name="extraction_results.jsonl", output_dir=".")
@@ -168,6 +189,13 @@ def make_sample_03_japanese():
     return prompt, examples, input_text
 
 
+def make_sample_04_japanese():
+    prompt, examples = define_extraction_task_04_japanese()
+    # The input text to be processed
+    input_text = "佐藤さんは部長の会議が11時に終われば11時から、終わらなければ12時からの会議に出席するように言われた。"
+    return prompt, examples, input_text
+
+
 def main() -> None:
     api_key = os.getenv("LANGEXTRACT_API_KEY")
     if api_key:
@@ -175,7 +203,7 @@ def main() -> None:
     else:
         print("Failed to load API key.")
 
-    prompt, examples, input_text = make_sample_03_japanese()
+    prompt, examples, input_text = make_sample_04_japanese()
 
     # Run the extraction
     result = lx.extract(
