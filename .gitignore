@@ -108,4 +108,6 @@ mypush.sh
 deep_translator_trial/src/__pycache__
 deep_translator_trial/.python-version
 deep_translator_trial/.venv
-
+xgboost_with_missing_value/plots/*
+xgboost_with_missing_value/data/*
+xgboost_with_missing_value/.mpl-cache/*
